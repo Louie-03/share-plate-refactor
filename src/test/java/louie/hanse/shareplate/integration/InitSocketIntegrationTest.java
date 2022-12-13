@@ -6,13 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -69,21 +65,10 @@ public class InitSocketIntegrationTest extends InitIntegrationTest {
     }
 
     protected static StompHeaders createStompHeaders(String accessToken, String destination) {
-        Map<String, List<String>> headers = new HashMap<>();
-        List<String> accessTokenValues = new ArrayList<>(1);
-        accessTokenValues.add(accessToken);
-        List<String> destinationValues = new ArrayList<>(1);
-        destinationValues.add(destination);
-        headers.put(HttpHeaders.AUTHORIZATION, accessTokenValues);
-        headers.put(StompHeaders.DESTINATION, destinationValues);
-        try {
-            Constructor<StompHeaders> constructor = StompHeaders.class
-                .getDeclaredConstructor(Map.class, boolean.class);
-            constructor.setAccessible(true);
-            return constructor.newInstance(headers, false);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        StompHeaders stompHeaders = new StompHeaders();
+        stompHeaders.add(HttpHeaders.AUTHORIZATION, accessToken);
+        stompHeaders.setDestination(destination);
+        return stompHeaders;
     }
 
     private static void initLocalDateTimeSerializerAndDeserializerFormatter()
