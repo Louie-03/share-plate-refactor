@@ -1,5 +1,6 @@
 package louie.hanse.shareplate.config;
 
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +37,9 @@ public class WebConfig implements WebMvcConfigurer {
             .order(1)
             .addPathPatterns("/members", "/members/location", "/shares", "/shares/mine",
                 "/shares/{id}", "/shares/{id}/entry", "/entries", "/wish-list", "/chatrooms/{id}",
-                "/chat-logs/update-read-time", "/chats/unread", "/chatroom-members",
-                "/chatrooms", "/keywords", "/keywords/{id}","/keywords/location", "/notifications/activity", "/notifications/keyword",
-                "/notifications/{id}", "/notifications")
+                "/chat-logs/update-read-time", "/chats/unread", "/chatroom-members", "/chatrooms",
+                "/keywords", "/keywords/{id}", "/keywords/location", "/notifications/activity",
+                "/notifications/keyword", "/notifications/{id}", "/notifications")
             .excludePathPatterns("/shares/recommendation", "/shares/writer");
 
         registry.addInterceptor(new LogoutInterceptor(jwtProvider, loginService))
@@ -57,7 +58,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
         return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder.serializers(
-            new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT)));
+                new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT)))
+            .deserializers(
+                new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT)));
     }
 
     @Override
