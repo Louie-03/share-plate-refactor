@@ -2,7 +2,7 @@ package louie.hanse.shareplate.web.dto.chat;
 
 import java.time.LocalDateTime;
 import lombok.Getter;
-import louie.hanse.shareplate.domain.Chat;
+import louie.hanse.shareplate.chat.domain.Chat;
 import louie.hanse.shareplate.domain.Member;
 import louie.hanse.shareplate.domain.Share;
 

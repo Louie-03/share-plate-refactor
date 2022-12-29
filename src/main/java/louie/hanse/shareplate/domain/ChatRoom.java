@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import louie.hanse.shareplate.chat.domain.Chat;
 import louie.hanse.shareplate.exception.GlobalException;
 import louie.hanse.shareplate.exception.type.ChatExceptionType;
 import louie.hanse.shareplate.type.ChatRoomType;

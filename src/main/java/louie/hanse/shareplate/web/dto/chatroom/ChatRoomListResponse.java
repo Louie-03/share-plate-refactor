@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.Getter;
-import louie.hanse.shareplate.domain.Chat;
+import louie.hanse.shareplate.chat.domain.Chat;
 import louie.hanse.shareplate.domain.ChatRoom;
 import louie.hanse.shareplate.domain.ChatRoomMember;
 import louie.hanse.shareplate.domain.Member;

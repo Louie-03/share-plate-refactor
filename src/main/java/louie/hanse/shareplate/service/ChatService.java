@@ -2,7 +2,7 @@ package louie.hanse.shareplate.service;
 
 import lombok.RequiredArgsConstructor;
 import louie.hanse.shareplate.domain.ActivityNotification;
-import louie.hanse.shareplate.domain.Chat;
+import louie.hanse.shareplate.chat.domain.Chat;
 import louie.hanse.shareplate.domain.ChatRoom;
 import louie.hanse.shareplate.domain.ChatRoomMember;
 import louie.hanse.shareplate.domain.Entry;

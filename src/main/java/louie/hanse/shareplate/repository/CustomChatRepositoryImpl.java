@@ -1,6 +1,6 @@
 package louie.hanse.shareplate.repository;
 
-import static louie.hanse.shareplate.domain.QChat.chat;
+import static louie.hanse.shareplate.chat.domain.QChat.chat;
 import static louie.hanse.shareplate.domain.QChatLog.chatLog;
 import static louie.hanse.shareplate.domain.QChatRoom.chatRoom;
 import static louie.hanse.shareplate.domain.QChatRoomMember.chatRoomMember;

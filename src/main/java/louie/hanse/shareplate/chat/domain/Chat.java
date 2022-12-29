@@ -1,6 +1,7 @@
-package louie.hanse.shareplate.domain;
+package louie.hanse.shareplate.chat.domain;
 
 import java.time.LocalDateTime;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,6 +12,8 @@ import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import louie.hanse.shareplate.domain.ChatRoom;
+import louie.hanse.shareplate.domain.Member;
 
 @Entity
 @Getter
@@ -29,7 +32,8 @@ public class Chat {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member writer;
 
-    private String contents;
+    @Embedded
+    private ChatContents contents;
 
     private LocalDateTime writtenDateTime = LocalDateTime.now();
 
@@ -37,6 +41,11 @@ public class Chat {
         chatRoom.shareIsCancelThrowException();
         this.chatRoom = chatRoom;
         this.writer = writer;
-        this.contents = contents;
+        this.contents = new ChatContents(contents);
     }
+
+    public String getContents() {
+        return contents.getContents();
+    }
+
 }
