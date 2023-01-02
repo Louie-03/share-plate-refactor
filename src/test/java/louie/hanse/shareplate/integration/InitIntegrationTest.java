@@ -13,7 +13,7 @@ import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import louie.hanse.shareplate.config.S3MockConfig;
-import louie.hanse.shareplate.jwt.JwtProvider;
+import louie.hanse.shareplate.common.jwt.JwtProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;

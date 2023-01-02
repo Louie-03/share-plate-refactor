@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.ToString;
-import louie.hanse.shareplate.domain.Member;
+import louie.hanse.shareplate.core.member.domain.Member;
 
 @Getter
 @ToString

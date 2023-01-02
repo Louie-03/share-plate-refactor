@@ -1,11 +1,11 @@
 package louie.hanse.shareplate.integration.chatRoom;
 
 import static io.restassured.RestAssured.given;
-import static louie.hanse.shareplate.exception.type.ChatRoomExceptionType.WRITER_CAN_NOT_QUESTION_CHAT;
-import static louie.hanse.shareplate.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.EMPTY_SHARE_INFO;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.SHARE_ID_IS_NEGATIVE;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.SHARE_NOT_FOUND;
+import static louie.hanse.shareplate.common.exception.type.ChatRoomExceptionType.WRITER_CAN_NOT_QUESTION_CHAT;
+import static louie.hanse.shareplate.common.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.EMPTY_SHARE_INFO;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_ID_IS_NEGATIVE;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_NOT_FOUND;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;

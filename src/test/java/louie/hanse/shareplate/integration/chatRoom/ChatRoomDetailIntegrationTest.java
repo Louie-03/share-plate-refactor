@@ -1,10 +1,10 @@
 package louie.hanse.shareplate.integration.chatRoom;
 
 import static io.restassured.RestAssured.given;
-import static louie.hanse.shareplate.exception.type.ChatRoomExceptionType.CHATROOM_ID_IS_NEGATIVE;
-import static louie.hanse.shareplate.exception.type.ChatRoomExceptionType.CHAT_ROOM_NOT_FOUND;
-import static louie.hanse.shareplate.exception.type.ChatRoomExceptionType.PATH_VARIABLE_EMPTY_CHATROOM_ID;
-import static louie.hanse.shareplate.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
+import static louie.hanse.shareplate.common.exception.type.ChatRoomExceptionType.CHATROOM_ID_IS_NEGATIVE;
+import static louie.hanse.shareplate.common.exception.type.ChatRoomExceptionType.CHAT_ROOM_NOT_FOUND;
+import static louie.hanse.shareplate.common.exception.type.ChatRoomExceptionType.PATH_VARIABLE_EMPTY_CHATROOM_ID;
+import static louie.hanse.shareplate.common.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;

@@ -1,9 +1,9 @@
 package louie.hanse.shareplate.integration.keyword;
 
 import static io.restassured.RestAssured.given;
-import static louie.hanse.shareplate.exception.type.KeywordExceptionType.EMPTY_KEYWORD_INFO;
-import static louie.hanse.shareplate.exception.type.KeywordExceptionType.KEYWORD_NOT_FOUND;
-import static louie.hanse.shareplate.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
+import static louie.hanse.shareplate.common.exception.type.KeywordExceptionType.EMPTY_KEYWORD_INFO;
+import static louie.hanse.shareplate.common.exception.type.KeywordExceptionType.KEYWORD_NOT_FOUND;
+import static louie.hanse.shareplate.common.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;

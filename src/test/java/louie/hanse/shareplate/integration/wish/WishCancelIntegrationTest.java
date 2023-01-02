@@ -1,12 +1,12 @@
 package louie.hanse.shareplate.integration.wish;
 
 import static io.restassured.RestAssured.given;
-import static louie.hanse.shareplate.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.SHARE_ID_IS_NEGATIVE;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.SHARE_IS_CANCELED;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.SHARE_NOT_FOUND;
-import static louie.hanse.shareplate.exception.type.WishExceptionType.EMPTY_WISH_INFO;
-import static louie.hanse.shareplate.exception.type.WishExceptionType.SHARE_NOT_WISH;
+import static louie.hanse.shareplate.common.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_ID_IS_NEGATIVE;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_IS_CANCELED;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_NOT_FOUND;
+import static louie.hanse.shareplate.common.exception.type.WishExceptionType.EMPTY_WISH_INFO;
+import static louie.hanse.shareplate.common.exception.type.WishExceptionType.SHARE_NOT_WISH;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;

@@ -1,11 +1,11 @@
 package louie.hanse.shareplate.integration.keyword;
 
 import static io.restassured.RestAssured.given;
-import static louie.hanse.shareplate.exception.type.KeywordExceptionType.KEYWORD_ID_IS_NEGATIVE;
-import static louie.hanse.shareplate.exception.type.KeywordExceptionType.KEYWORD_NOT_FOUND;
-import static louie.hanse.shareplate.exception.type.KeywordExceptionType.OTHER_MEMBER_CAN_NOT_DELETE_KEYWORD;
-import static louie.hanse.shareplate.exception.type.KeywordExceptionType.PATH_VARIABLE_EMPTY_KEYWORD_ID;
-import static louie.hanse.shareplate.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
+import static louie.hanse.shareplate.common.exception.type.KeywordExceptionType.KEYWORD_ID_IS_NEGATIVE;
+import static louie.hanse.shareplate.common.exception.type.KeywordExceptionType.KEYWORD_NOT_FOUND;
+import static louie.hanse.shareplate.common.exception.type.KeywordExceptionType.OTHER_MEMBER_CAN_NOT_DELETE_KEYWORD;
+import static louie.hanse.shareplate.common.exception.type.KeywordExceptionType.PATH_VARIABLE_EMPTY_KEYWORD_ID;
+import static louie.hanse.shareplate.common.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
