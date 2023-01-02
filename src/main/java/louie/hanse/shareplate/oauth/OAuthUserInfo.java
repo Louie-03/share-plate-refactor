@@ -7,7 +7,7 @@ import louie.hanse.shareplate.core.member.domain.Member;
 
 @Getter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class OauthUserInfo {
+public class OAuthUserInfo {
 
     private Long id;
     private Properties properties;

@@ -3,7 +3,7 @@ package louie.hanse.shareplate.core.member.service;
 import lombok.RequiredArgsConstructor;
 import louie.hanse.shareplate.core.member.repository.MemberRepository;
 import louie.hanse.shareplate.core.member.domain.Member;
-import louie.hanse.shareplate.oauth.OauthUserInfo;
+import louie.hanse.shareplate.oauth.OAuthUserInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +16,7 @@ public class LoginService {
     private final MemberService memberService;
 
     @Transactional
-    public Member login(OauthUserInfo oauthUserInfo) {
+    public Member login(OAuthUserInfo oauthUserInfo) {
         Member member = memberRepository.findById(oauthUserInfo.getId()).orElse(null);
 
         if (member == null) {

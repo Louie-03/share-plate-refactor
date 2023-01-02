@@ -3,7 +3,7 @@ package louie.hanse.shareplate.oauth.service;
 import lombok.RequiredArgsConstructor;
 import louie.hanse.shareplate.oauth.OAuthAccessToken;
 import louie.hanse.shareplate.oauth.OAuthProperties;
-import louie.hanse.shareplate.oauth.OauthUserInfo;
+import louie.hanse.shareplate.oauth.OAuthUserInfo;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.converter.FormHttpMessageConverter;
@@ -35,7 +35,7 @@ public class OAuthService {
             oAuthTokenRequestHttpEntity, OAuthAccessToken.class).getAccessToken();
     }
 
-    public OauthUserInfo getUserInfo(String accessToken) {
+    public OAuthUserInfo getUserInfo(String accessToken) {
         RestTemplate restTemplate = createRestTemplateWithFormHttpMessageConverter();
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -43,7 +43,7 @@ public class OAuthService {
         HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
 
         return restTemplate.postForObject(oAuthProperties.getUserApiUrl(), httpEntity,
-            OauthUserInfo.class);
+            OAuthUserInfo.class);
     }
 
     private RestTemplate createRestTemplateWithFormHttpMessageConverter() {

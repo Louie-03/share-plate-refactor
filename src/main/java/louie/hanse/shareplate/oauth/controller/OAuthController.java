@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import louie.hanse.shareplate.oauth.OAuthProperties;
-import louie.hanse.shareplate.oauth.OauthUserInfo;
+import louie.hanse.shareplate.oauth.OAuthUserInfo;
 import louie.hanse.shareplate.oauth.service.OAuthService;
 import louie.hanse.shareplate.core.member.domain.Member;
 import louie.hanse.shareplate.common.exception.GlobalException;
@@ -47,7 +47,7 @@ public class OAuthController {
             throw new GlobalException(AuthExceptionType.INCORRECT_AUTHORIZATION_CODE);
         }
 
-        OauthUserInfo userInfo = oAuthService.getUserInfo(oauthAccessToken);
+        OAuthUserInfo userInfo = oAuthService.getUserInfo(oauthAccessToken);
 
         Member member = loginService.login(userInfo);
 
