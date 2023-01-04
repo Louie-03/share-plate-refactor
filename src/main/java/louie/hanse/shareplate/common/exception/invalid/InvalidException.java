@@ -1,4 +1,4 @@
-package louie.hanse.shareplate.common.exception;
+package louie.hanse.shareplate.common.exception.invalid;
 
 public class InvalidException extends RuntimeException {
 

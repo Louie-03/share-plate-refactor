@@ -30,12 +30,12 @@ public class ChatLog {
 
     private LocalDateTime recentReadDatetime = LocalDateTime.now();
 
-    public void updateRecentReadDatetime() {
-        this.recentReadDatetime = LocalDateTime.now();
-    }
-
     public ChatLog(Member member, ChatRoom chatRoom) {
         this.member = member;
         this.chatRoom = chatRoom;
+    }
+
+    public void updateRecentReadDatetime() {
+        this.recentReadDatetime = LocalDateTime.now();
     }
 }
