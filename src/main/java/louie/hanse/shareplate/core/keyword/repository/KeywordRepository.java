@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import louie.hanse.shareplate.core.keyword.domain.Keyword;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -20,15 +21,20 @@ public interface KeywordRepository extends JpaRepository<Keyword, Long>,
         @Param("memberId") Long memberId, @Param("title") String title,
         @Param("longitude") double longitude, @Param("latitude") double latitude);
 
-    void deleteAllByMemberIdAndLocation(Long memberId, String location);
+    @Modifying(clearAutomatically = true)
+    @Query("delete from Keyword k where "
+        + "k.member.id = :memberId and "
+        + "k.location.location = :location")
+    void deleteAllByMemberIdAndLocation(@Param("memberId") Long memberId,
+        @Param("location") String location);
 
-    List<Keyword> findAllByMemberIdAndLocation(Long memberId, String location);
+    @Query("select k from Keyword k where "
+        + "k.member.id = :memberId and "
+        + "k.location.location = :location")
+    List<Keyword> findAllByMemberIdAndLocation(@Param("memberId") Long memberId,
+        @Param("location") String location);
 
     @Query("select k from Keyword k join fetch k.member where k.id = :id")
     Optional<Keyword> findWithMemberById(@Param("id") Long id);
-
-    boolean existsByMemberIdAndContentsAndLocation(Long memberId, String contents, String location);
-
-    boolean existsByMemberIdAndLocation(Long memberId, String location);
 
 }
