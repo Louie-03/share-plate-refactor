@@ -2,6 +2,7 @@ package louie.hanse.shareplate.common.interceptor;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,7 @@ public class LogoutInterceptor implements HandlerInterceptor {
         }
 
         String findRefreshToken = loginService.findRefreshTokenByMemberId(refreshTokenMemberId);
-        if (findRefreshToken == null || !findRefreshToken.equals(refreshToken)) {
+        if (Objects.isNull(findRefreshToken) || !findRefreshToken.equals(refreshToken)) {
             throw new GlobalException(AuthExceptionType.INVALID_REFRESH_TOKEN);
         }
 

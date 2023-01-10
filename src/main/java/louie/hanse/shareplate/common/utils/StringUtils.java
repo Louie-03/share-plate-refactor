@@ -1,8 +1,10 @@
 package louie.hanse.shareplate.common.utils;
 
+import java.util.Objects;
+
 public class StringUtils {
 
     public static boolean isBlank(String string) {
-        return string == null || string.isBlank();
+        return Objects.isNull(string) || string.isBlank();
     }
 }

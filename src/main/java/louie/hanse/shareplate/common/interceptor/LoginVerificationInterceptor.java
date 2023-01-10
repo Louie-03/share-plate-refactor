@@ -1,6 +1,7 @@
 package louie.hanse.shareplate.common.interceptor;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +49,7 @@ public class LoginVerificationInterceptor implements HandlerInterceptor {
         }
 
         String findRefreshToken = loginService.findRefreshTokenByMemberId(refreshTokenMemberId);
-        if (findRefreshToken == null || !findRefreshToken.equals(refreshToken)) {
+        if (Objects.isNull(findRefreshToken) || !findRefreshToken.equals(refreshToken)) {
             throw new GlobalException(MemberExceptionType.NOT_LOGIN_MEMBER);
         }
         return true;

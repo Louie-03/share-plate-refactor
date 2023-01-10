@@ -1,5 +1,6 @@
 package louie.hanse.shareplate.core.member.service;
 
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import louie.hanse.shareplate.core.member.repository.MemberRepository;
 import louie.hanse.shareplate.core.member.domain.Member;
@@ -19,7 +20,7 @@ public class LoginService {
     public Member login(OAuthUserInfo oauthUserInfo) {
         Member member = memberRepository.findById(oauthUserInfo.getId()).orElse(null);
 
-        if (member == null) {
+        if (Objects.isNull(null)) {
             member = oauthUserInfo.toMember();
             memberRepository.save(member);
         }
