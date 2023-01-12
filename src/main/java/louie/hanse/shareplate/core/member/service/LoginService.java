@@ -20,7 +20,7 @@ public class LoginService {
     public Member login(OAuthUserInfo oauthUserInfo) {
         Member member = memberRepository.findById(oauthUserInfo.getId()).orElse(null);
 
-        if (Objects.isNull(null)) {
+        if (Objects.isNull(member)) {
             member = oauthUserInfo.toMember();
             memberRepository.save(member);
         }

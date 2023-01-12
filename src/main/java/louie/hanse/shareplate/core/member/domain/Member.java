@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import louie.hanse.shareplate.common.domain.ImageUrl;
 import louie.hanse.shareplate.core.share.domain.Share;
 
 @Getter
@@ -22,35 +23,39 @@ public class Member {
     @OneToMany(mappedBy = "writer")
     private List<Share> shares = new ArrayList<>();
 
-    private String profileImageUrl;
-    private String thumbnailImageUrl;
-    private String nickname;
-    private String email;
-    private String refreshToken;
+    private Nickname nickname;
+    private Email email;
+    private RefreshToken refreshToken;
+
+    @AttributeOverride(name = "imageUrl", column = @Column(name = "profile_image_url"))
+    private ImageUrl profileImageUrl;
+
+    @AttributeOverride(name = "imageUrl", column = @Column(name = "thumbnail_image_url"))
+    private ImageUrl thumbnailImageUrl;
 
     public Member(Long id, String profileImageUrl, String thumbnailImageUrl, String nickname,
         String email) {
         this.id = id;
-        this.profileImageUrl = profileImageUrl;
-        this.thumbnailImageUrl = thumbnailImageUrl;
-        this.nickname = nickname;
-        this.email = email;
+        this.profileImageUrl = new ImageUrl(profileImageUrl);
+        this.thumbnailImageUrl = new ImageUrl(thumbnailImageUrl);
+        this.nickname = new Nickname(nickname);
+        this.email = new Email(email);
     }
 
     public void changeProfileImageUrl(String profileImageUrl) {
-        this.profileImageUrl = profileImageUrl;
+        this.profileImageUrl = new ImageUrl(profileImageUrl);
     }
 
     public void changeThumbnailImageUrl(String thumbnailImageUrl) {
-        this.thumbnailImageUrl = thumbnailImageUrl;
+        this.thumbnailImageUrl = new ImageUrl(thumbnailImageUrl);
     }
 
     public void changeNickname(String nickname) {
-        this.nickname = nickname;
+        this.nickname = new Nickname(nickname);
     }
 
     public void changeRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
+        this.refreshToken = new RefreshToken(refreshToken);
     }
 
     public void deleteRefreshToken() {
@@ -76,6 +81,26 @@ public class Member {
     @Override
     public int hashCode() {
         return Objects.hash(id, profileImageUrl, thumbnailImageUrl, nickname, email, refreshToken);
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl.getImageUrl();
+    }
+
+    public String getThumbnailImageUrl() {
+        return thumbnailImageUrl.getImageUrl();
+    }
+
+    public String getNickname() {
+        return nickname.getNickname();
+    }
+
+    public String getEmail() {
+        return email.getEmail();
+    }
+
+    public String getRefreshToken() {
+        return refreshToken.getRefreshToken();
     }
 }
 
