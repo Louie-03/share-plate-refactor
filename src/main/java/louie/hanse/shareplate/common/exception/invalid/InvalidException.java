@@ -1,6 +1,6 @@
 package louie.hanse.shareplate.common.exception.invalid;
 
-public class InvalidException extends RuntimeException {
+public abstract class InvalidException extends RuntimeException {
 
     private final String message;
 
