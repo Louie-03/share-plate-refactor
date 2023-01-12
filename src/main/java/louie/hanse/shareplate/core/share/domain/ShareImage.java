@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import louie.hanse.shareplate.common.domain.ImageUrl;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -22,14 +23,14 @@ public class ShareImage {
     @ManyToOne(fetch = FetchType.LAZY)
     private Share share;
 
-    private String imageUrl;
+    private ImageUrl imageUrl;
 
     public ShareImage(Share share, String imageUrl) {
         this.share = share;
-        this.imageUrl = imageUrl;
+        this.imageUrl = new ImageUrl(imageUrl);
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return imageUrl.getImageUrl();
     }
 }
