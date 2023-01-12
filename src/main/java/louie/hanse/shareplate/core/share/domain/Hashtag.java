@@ -22,14 +22,14 @@ public class Hashtag {
     @ManyToOne(fetch = FetchType.LAZY)
     private Share share;
 
-    private String contents;
+    private HashtagContents contents;
 
     public Hashtag(Share share, String contents) {
         this.share = share;
-        this.contents = contents;
+        this.contents = new HashtagContents(contents);
     }
 
     public String getContents() {
-        return contents;
+        return contents.getContents();
     }
 }
