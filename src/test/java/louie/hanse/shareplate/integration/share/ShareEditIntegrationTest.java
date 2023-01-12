@@ -2,19 +2,19 @@ package louie.hanse.shareplate.integration.share;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.MULTIPART;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.CLOSE_TO_THE_CLOSED_DATE_TIME_CANNOT_EDIT;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.EMPTY_SHARE_INFO;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.IMAGE_LIMIT_EXCEEDED;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.IS_NOT_WRITER;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.NOT_SUPPORT_IMAGE_TYPE;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.OUT_OF_SCOPE_FOR_KOREA;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.PAST_CLOSED_DATE_TIME;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.PATH_VARIABLE_EMPTY_SHARE_ID;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.SHARE_ID_IS_NEGATIVE;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.SHARE_INFO_IS_NEGATIVE;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.SHARE_IS_CANCELED;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.SHARE_IS_CLOSED;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.SHARE_NOT_FOUND;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.CLOSE_TO_THE_CLOSED_DATE_TIME_CANNOT_EDIT;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.EMPTY_SHARE_INFO;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.IMAGE_LIMIT_EXCEEDED;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.IS_NOT_WRITER;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.NOT_SUPPORT_IMAGE_TYPE;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.OUT_OF_SCOPE_FOR_KOREA;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.PAST_CLOSED_DATE_TIME;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.PATH_VARIABLE_EMPTY_SHARE_ID;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_ID_IS_NEGATIVE;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_INFO_IS_NEGATIVE;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_IS_CANCELED;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_IS_CLOSED;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_NOT_FOUND;
 import static louie.hanse.shareplate.integration.entry.utils.EntryIntegrationTestUtils.getShareRegisterRequest;
 import static louie.hanse.shareplate.integration.share.utils.ShareIntegrationTestUtils.createMultiPartSpecification;
 import static org.hamcrest.Matchers.equalTo;
@@ -27,7 +27,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 import java.io.IOException;
 import java.time.LocalDateTime;
 import louie.hanse.shareplate.integration.InitIntegrationTest;
-import louie.hanse.shareplate.service.ShareService;
+import louie.hanse.shareplate.core.share.service.ShareService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +64,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", false)
             .formParam("latitude", 37.500326)
             .formParam("longitude", 127.036087)
-            .formParam("closedDateTime", "2022-12-31 14:00")
+            .formParam("closedDateTime", "2023-12-31 14:00")
 
             .when()
             .put("/shares/{id}")
@@ -96,7 +96,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", false)
             .formParam("latitude", 37.500326)
             .formParam("longitude", 127.036087)
-            .formParam("closedDateTime", "2022-12-31 14:00")
+            .formParam("closedDateTime", "2023-12-31 14:00")
 
             .when()
             .put("/shares/{id}")
@@ -132,7 +132,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", false)
             .formParam("latitude", 37.500326)
             .formParam("longitude", 127.036087)
-            .formParam("closedDateTime", "2022-12-31 14:00")
+            .formParam("closedDateTime", "2023-12-31 14:00")
 
             .when()
             .put("/shares/{id}")
@@ -172,7 +172,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", true)
             .formParam("latitude", 37.524159)
             .formParam("longitude", 126.872879)
-            .formParam("closedDateTime", "2022-12-30 14:00")
+            .formParam("closedDateTime", "2023-12-30 14:00")
 
             .when()
             .put("/shares/{id}")
@@ -209,7 +209,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", true)
             .formParam("latitude", 39)
             .formParam("longitude", 126.872879)
-            .formParam("closedDateTime", "2022-12-30 14:00")
+            .formParam("closedDateTime", "2023-12-30 14:00")
 
             .when()
             .put("/shares/{id}")
@@ -246,7 +246,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", true)
             .formParam("latitude", 37.524159)
             .formParam("longitude", 123)
-            .formParam("closedDateTime", "2022-12-30 14:00")
+            .formParam("closedDateTime", "2023-12-30 14:00")
 
             .when()
             .put("/shares/{id}")
@@ -319,7 +319,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", false)
             .formParam("latitude", 37.500326)
             .formParam("longitude", 127.036087)
-            .formParam("closedDateTime", "2022-12-31 14:00")
+            .formParam("closedDateTime", "2023-12-31 14:00")
 
             .when()
             .put("/shares/{id}")
@@ -355,7 +355,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", false)
             .formParam("latitude", 37.500326)
             .formParam("longitude", 127.036087)
-            .formParam("closedDateTime", "2022-12-31 14:00")
+            .formParam("closedDateTime", "2023-12-31 14:00")
 
             .when()
             .put("/shares/{id}")
@@ -391,7 +391,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", false)
             .formParam("latitude", 37.500326)
             .formParam("longitude", 127.036087)
-            .formParam("closedDateTime", "2022-12-31 14:00")
+            .formParam("closedDateTime", "2023-12-31 14:00")
 
             .when()
             .put("/shares/{id}")
@@ -427,7 +427,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", false)
             .formParam("latitude", 37.500326)
             .formParam("longitude", 127.036087)
-            .formParam("closedDateTime", "2022-12-31 14:00")
+            .formParam("closedDateTime", "2023-12-31 14:00")
 
             .when()
             .put("/shares/{id}")
@@ -463,7 +463,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", false)
             .formParam("latitude", 37.500326)
             .formParam("longitude", 127.036087)
-            .formParam("closedDateTime", "2022-12-31 14:00")
+            .formParam("closedDateTime", "2023-12-31 14:00")
 
             .when()
             .put("/shares/{id}")
@@ -499,7 +499,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", false)
             .formParam("latitude", 37.500326)
             .formParam("longitude", 127.036087)
-            .formParam("closedDateTime", "2022-12-31 14:00")
+            .formParam("closedDateTime", "2023-12-31 14:00")
 
             .when()
             .put("/shares/{id}")
@@ -535,7 +535,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", false)
             .formParam("latitude", 37.500326)
             .formParam("longitude", 127.036087)
-            .formParam("closedDateTime", "2022-12-31 14:00")
+            .formParam("closedDateTime", "2023-12-31 14:00")
 
             .when()
             .put("/shares/{id}")
@@ -571,7 +571,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", false)
             .formParam("latitude", 37.500326)
             .formParam("longitude", 127.036087)
-            .formParam("closedDateTime", "2022-12-31 14:00")
+            .formParam("closedDateTime", "2023-12-31 14:00")
 
             .when()
             .put("/shares/{id}")
@@ -607,7 +607,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", false)
             .formParam("latitude", 37.500326)
             .formParam("longitude", 127.036087)
-            .formParam("closedDateTime", "2022-12-31 14:00")
+            .formParam("closedDateTime", "2023-12-31 14:00")
 
             .when()
             .put("/shares/{id}")
@@ -648,7 +648,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", false)
             .formParam("latitude", 37.500326)
             .formParam("longitude", 127.036087)
-            .formParam("closedDateTime", "2022-12-31 14:00")
+            .formParam("closedDateTime", "2023-12-31 14:00")
 
             .when()
             .put("/shares/{id}")

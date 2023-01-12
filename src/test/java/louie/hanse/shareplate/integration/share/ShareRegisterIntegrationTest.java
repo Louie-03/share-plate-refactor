@@ -2,11 +2,11 @@ package louie.hanse.shareplate.integration.share;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.MULTIPART;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.EMPTY_SHARE_INFO;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.IMAGE_LIMIT_EXCEEDED;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.NOT_SUPPORT_IMAGE_TYPE;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.OUT_OF_SCOPE_FOR_KOREA;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.PAST_CLOSED_DATE_TIME;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.EMPTY_SHARE_INFO;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.IMAGE_LIMIT_EXCEEDED;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.NOT_SUPPORT_IMAGE_TYPE;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.OUT_OF_SCOPE_FOR_KOREA;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.PAST_CLOSED_DATE_TIME;
 import static louie.hanse.shareplate.integration.share.utils.ShareIntegrationTestUtils.createMultiPartSpecification;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -50,7 +50,7 @@ class ShareRegisterIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", true)
             .formParam("latitude", 37.524159)
             .formParam("longitude", 126.872879)
-            .formParam("closedDateTime", "2022-12-30 14:00")
+            .formParam("closedDateTime", "2023-12-30 14:00")
 
             .when()
             .post("/shares")
@@ -83,7 +83,7 @@ class ShareRegisterIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", true)
             .formParam("latitude", 37.524159)
             .formParam("longitude", 126.872879)
-            .formParam("closedDateTime", "2022-12-30 14:00")
+            .formParam("closedDateTime", "2023-12-30 14:00")
 
             .when()
             .post("/shares")
@@ -118,7 +118,7 @@ class ShareRegisterIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", true)
             .formParam("latitude", 37.524159)
             .formParam("longitude", 126.872879)
-            .formParam("closedDateTime", "2022-12-30 14:00")
+            .formParam("closedDateTime", "2023-12-30 14:00")
 
             .when()
             .post("/shares")
@@ -157,7 +157,7 @@ class ShareRegisterIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", true)
             .formParam("latitude", 37.524159)
             .formParam("longitude", 126.872879)
-            .formParam("closedDateTime", "2022-12-30 14:00")
+            .formParam("closedDateTime", "2023-12-30 14:00")
 
             .when()
             .post("/shares")
@@ -193,7 +193,7 @@ class ShareRegisterIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", true)
             .formParam("latitude", 39)
             .formParam("longitude", 126.872879)
-            .formParam("closedDateTime", "2022-12-30 14:00")
+            .formParam("closedDateTime", "2023-12-30 14:00")
 
             .when()
             .post("/shares")
@@ -229,7 +229,7 @@ class ShareRegisterIntegrationTest extends InitIntegrationTest {
             .formParam("priceNegotiation", true)
             .formParam("latitude", 37.524159)
             .formParam("longitude", 123)
-            .formParam("closedDateTime", "2022-12-30 14:00")
+            .formParam("closedDateTime", "2023-12-30 14:00")
 
             .when()
             .post("/shares")

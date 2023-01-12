@@ -1,8 +1,8 @@
 package louie.hanse.shareplate.integration.share;
 
 import static io.restassured.RestAssured.given;
-import static louie.hanse.shareplate.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.EMPTY_SHARE_INFO;
+import static louie.hanse.shareplate.common.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.EMPTY_SHARE_INFO;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;

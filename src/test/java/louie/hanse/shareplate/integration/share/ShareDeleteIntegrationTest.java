@@ -1,10 +1,10 @@
 package louie.hanse.shareplate.integration.share;
 
 import static io.restassured.RestAssured.given;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.CLOSE_TO_THE_CLOSED_DATE_TIME_CANNOT_CANCEL;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.IS_NOT_WRITER;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.SHARE_ID_IS_NEGATIVE;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.SHARE_NOT_FOUND;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.CLOSE_TO_THE_CLOSED_DATE_TIME_CANNOT_CANCEL;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.IS_NOT_WRITER;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_ID_IS_NEGATIVE;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_NOT_FOUND;
 import static louie.hanse.shareplate.integration.entry.utils.EntryIntegrationTestUtils.getShareRegisterRequest;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -13,7 +13,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 import java.io.IOException;
 import java.time.LocalDateTime;
 import louie.hanse.shareplate.integration.InitIntegrationTest;
-import louie.hanse.shareplate.service.ShareService;
+import louie.hanse.shareplate.core.share.service.ShareService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

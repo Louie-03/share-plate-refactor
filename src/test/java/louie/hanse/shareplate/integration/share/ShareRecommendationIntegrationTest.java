@@ -1,8 +1,8 @@
 package louie.hanse.shareplate.integration.share;
 
 import static io.restassured.RestAssured.given;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.EMPTY_SHARE_INFO;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.OUT_OF_SCOPE_FOR_KOREA;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.EMPTY_SHARE_INFO;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.OUT_OF_SCOPE_FOR_KOREA;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;

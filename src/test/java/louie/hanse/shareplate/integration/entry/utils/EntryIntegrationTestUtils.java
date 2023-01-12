@@ -3,8 +3,8 @@ package louie.hanse.shareplate.integration.entry.utils;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
-import louie.hanse.shareplate.type.ShareType;
-import louie.hanse.shareplate.web.dto.share.ShareRegisterRequest;
+import louie.hanse.shareplate.core.share.domain.ShareType;
+import louie.hanse.shareplate.core.share.dto.request.ShareRegisterRequest;
 import org.springframework.mock.web.MockMultipartFile;
 
 public class EntryIntegrationTestUtils {

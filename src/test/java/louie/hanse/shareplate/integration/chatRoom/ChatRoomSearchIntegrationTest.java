@@ -1,9 +1,9 @@
 package louie.hanse.shareplate.integration.chatRoom;
 
 import static io.restassured.RestAssured.given;
-import static louie.hanse.shareplate.exception.type.ChatRoomExceptionType.EMPTY_CHATROOM_INFO;
-import static louie.hanse.shareplate.exception.type.ChatRoomExceptionType.INCORRECT_TYPE_VALUE;
-import static louie.hanse.shareplate.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
+import static louie.hanse.shareplate.common.exception.type.ChatRoomExceptionType.EMPTY_CHATROOM_INFO;
+import static louie.hanse.shareplate.common.exception.type.ChatRoomExceptionType.INCORRECT_TYPE_VALUE;
+import static louie.hanse.shareplate.common.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;

@@ -13,7 +13,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import louie.hanse.shareplate.integration.InitSocketIntegrationTest;
-import louie.hanse.shareplate.web.dto.notification.KeywordNotificationResponse;
+import louie.hanse.shareplate.core.notification.dto.response.KeywordNotificationResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -56,7 +56,7 @@ class KeywordNotificationSocketIntegrationTest extends InitSocketIntegrationTest
             .formParam("priceNegotiation", true)
             .formParam("latitude", 37.499237)
             .formParam("longitude", 127.026364)
-            .formParam("closedDateTime", "2022-12-30 14:00")
+            .formParam("closedDateTime", "2023-12-30 14:00")
 
             .when()
             .post("/shares")

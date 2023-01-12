@@ -2,8 +2,8 @@ package louie.hanse.shareplate.integration.member;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.MULTIPART;
-import static louie.hanse.shareplate.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
-import static louie.hanse.shareplate.exception.type.MemberExceptionType.NOT_SUPPORT_IMAGE_TYPE;
+import static louie.hanse.shareplate.common.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
+import static louie.hanse.shareplate.common.exception.type.MemberExceptionType.NOT_SUPPORT_IMAGE_TYPE;
 import static louie.hanse.shareplate.integration.share.utils.ShareIntegrationTestUtils.createMultiPartSpecification;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;

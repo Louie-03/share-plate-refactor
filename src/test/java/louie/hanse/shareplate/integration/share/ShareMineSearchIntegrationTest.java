@@ -1,9 +1,9 @@
 package louie.hanse.shareplate.integration.share;
 
 import static io.restassured.RestAssured.given;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.EMPTY_SHARE_INFO;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.INCORRECT_MINE_VALUE;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.INCORRECT_TYPE_VALUE;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.EMPTY_SHARE_INFO;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.INCORRECT_MINE_VALUE;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.INCORRECT_TYPE_VALUE;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;

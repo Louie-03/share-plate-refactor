@@ -1,10 +1,10 @@
 package louie.hanse.shareplate.integration.share;
 
 import static io.restassured.RestAssured.given;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.PATH_VARIABLE_EMPTY_SHARE_ID;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.SHARE_ID_IS_NEGATIVE;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.SHARE_IS_CANCELED;
-import static louie.hanse.shareplate.exception.type.ShareExceptionType.SHARE_NOT_FOUND;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.PATH_VARIABLE_EMPTY_SHARE_ID;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_ID_IS_NEGATIVE;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_IS_CANCELED;
+import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_NOT_FOUND;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;

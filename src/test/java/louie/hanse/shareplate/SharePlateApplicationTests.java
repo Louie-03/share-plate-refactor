@@ -8,6 +8,7 @@ class SharePlateApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
