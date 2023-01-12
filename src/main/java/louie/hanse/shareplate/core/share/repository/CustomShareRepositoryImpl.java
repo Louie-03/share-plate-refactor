@@ -38,11 +38,11 @@ public class CustomShareRepositoryImpl implements CustomShareRepository {
                 typeEq(request.getType()),
                 titleContains(request.getKeyword()),
                 share.cancel.eq(false),
-                share.closedDateTime.gt(LocalDateTime.now()),
+                share.closedDateTime.closedDateTime.gt(LocalDateTime.now()),
                 acos(cos(radians(constant(latitude)))
-                    .multiply(cos(radians(share.latitude)))
-                    .multiply(cos(radians(share.longitude).subtract(radians(constant(longitude)))))
-                    .add(sin(radians(constant(latitude))).multiply(sin(radians(share.latitude)))))
+                    .multiply(cos(radians(share.latitude.latitude)))
+                    .multiply(cos(radians(share.longitude.longitude).subtract(radians(constant(longitude)))))
+                    .add(sin(radians(constant(latitude))).multiply(sin(radians(share.latitude.latitude)))))
                     .multiply(constant(6371))
                     .loe(2)
             ).fetch();
@@ -58,11 +58,11 @@ public class CustomShareRepositoryImpl implements CustomShareRepository {
             .where(
                 titleContains(request.getKeyword()),
                 share.cancel.eq(false),
-                share.closedDateTime.gt(LocalDateTime.now()),
+                share.closedDateTime.closedDateTime.gt(LocalDateTime.now()),
                 acos(cos(radians(constant(latitude)))
-                    .multiply(cos(radians(share.latitude)))
-                    .multiply(cos(radians(share.longitude).subtract(radians(constant(longitude)))))
-                    .add(sin(radians(constant(latitude))).multiply(sin(radians(share.latitude)))))
+                    .multiply(cos(radians(share.latitude.latitude)))
+                    .multiply(cos(radians(share.longitude.longitude).subtract(radians(constant(longitude)))))
+                    .add(sin(radians(constant(latitude))).multiply(sin(radians(share.latitude.latitude)))))
                     .multiply(constant(6371))
                     .loe(2)
             )
@@ -112,13 +112,13 @@ public class CustomShareRepositoryImpl implements CustomShareRepository {
 
     private BooleanExpression isExpired(boolean expired, LocalDateTime currentDateTime) {
         if (expired) {
-            return share.closedDateTime.lt(currentDateTime);
+            return share.closedDateTime.closedDateTime.lt(currentDateTime);
         }
-        return share.closedDateTime.gt(currentDateTime);
+        return share.closedDateTime.closedDateTime.gt(currentDateTime);
     }
 
     private BooleanExpression titleContains(String keyword) {
-        return StringUtils.hasText(keyword) ? share.title.contains(keyword) : null;
+        return StringUtils.hasText(keyword) ? share.title.title.contains(keyword) : null;
     }
 
 }

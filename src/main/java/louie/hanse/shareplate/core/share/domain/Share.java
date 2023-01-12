@@ -16,6 +16,9 @@ import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import louie.hanse.shareplate.common.domain.Latitude;
+import louie.hanse.shareplate.common.domain.Location;
+import louie.hanse.shareplate.common.domain.Longitude;
 import louie.hanse.shareplate.core.chatroom.domain.ChatRoom;
 import louie.hanse.shareplate.core.wish.domain.Wish;
 import louie.hanse.shareplate.core.member.domain.Member;
@@ -56,18 +59,18 @@ public class Share {
     private ShareType type;
 
     private boolean cancel;
-    private String title;
-    private int price;
-    private int originalPrice;
-    private int recruitment;
-    private boolean locationNegotiation;
-    private boolean priceNegotiation;
-    private String locationGuide;
-    private String location;
-    private double latitude;
-    private double longitude;
-    private String description;
-    private LocalDateTime closedDateTime;
+    private Title title;
+    private Price price;
+    private OriginalPrice originalPrice;
+    private Recruitment recruitment;
+    private LocationNegotiation locationNegotiation;
+    private PriceNegotiation priceNegotiation;
+    private LocationGuide locationGuide;
+    private Location location;
+    private Latitude latitude;
+    private Longitude longitude;
+    private Description description;
+    private ClosedDateTime closedDateTime;
     private LocalDateTime createdDateTime = LocalDateTime.now();
 
     public Share(Long id, Member writer, ShareType type, String title, int price, int originalPrice,
@@ -77,38 +80,26 @@ public class Share {
         this.id = id;
         this.writer = writer;
         this.type = type;
-        this.title = title;
-        this.price = price;
-        this.originalPrice = originalPrice;
-        this.recruitment = recruitment;
-        this.location = location;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.description = description;
-        this.closedDateTime = closedDateTime;
-        this.locationGuide = locationGuide;
-        this.locationNegotiation = locationNegotiation;
-        this.priceNegotiation = priceNegotiation;
+        this.title = new Title(title);
+        this.price = new Price(price);
+        this.originalPrice = new OriginalPrice(originalPrice);
+        this.recruitment = new Recruitment(recruitment);
+        this.locationNegotiation = new LocationNegotiation(locationNegotiation);
+        this.priceNegotiation = new PriceNegotiation(priceNegotiation);
+        this.locationGuide = new LocationGuide(locationGuide);
+        this.location = new Location(location);
+        this.latitude = new Latitude(latitude);
+        this.longitude = new Longitude(longitude);
+        this.description = new Description(description);
+        this.closedDateTime = new ClosedDateTime(closedDateTime);
     }
 
     public Share(Member writer, ShareType type, String title, int price, int originalPrice,
         int recruitment, String location, double latitude, double longitude, String description,
         LocalDateTime closedDateTime, String locationGuide, boolean locationNegotiation,
         boolean priceNegotiation) {
-        this.writer = writer;
-        this.type = type;
-        this.title = title;
-        this.price = price;
-        this.originalPrice = originalPrice;
-        this.recruitment = recruitment;
-        this.location = location;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.description = description;
-        this.closedDateTime = closedDateTime;
-        this.locationGuide = locationGuide;
-        this.locationNegotiation = locationNegotiation;
-        this.priceNegotiation = priceNegotiation;
+        this(null, writer, type, title, price, originalPrice, recruitment, location, latitude, longitude,
+            description, closedDateTime, locationGuide, locationNegotiation, priceNegotiation);
     }
 
     public void addShareImage(String shareImageUrl) {
@@ -125,10 +116,7 @@ public class Share {
     }
 
     public boolean isNotEnd() {
-        if (closedDateTime.compareTo(LocalDateTime.now()) > 0) {
-            return true;
-        }
-        return false;
+        return closedDateTime.isNotEnd();
     }
 
     public boolean isEnd() {
@@ -136,12 +124,9 @@ public class Share {
     }
 
     public boolean isLeftLessThanAnHour() {
-        LocalDateTime leftAnHour = closedDateTime.minusHours(1);
-        if (leftAnHour.compareTo(LocalDateTime.now()) < 0) {
-            return true;
-        }
-        return false;
+        return closedDateTime.isLeftLessThanAnHour();
     }
+
 
     public void isNotWriterThrowException(Member member) {
         if (isNotWriter(member)) {
@@ -186,7 +171,7 @@ public class Share {
     }
 
     public void isClosedThrowException() {
-        if (closedDateTime.isBefore(LocalDateTime.now())) {
+        if (closedDateTime.isClosed()) {
             throw new GlobalException(ShareExceptionType.SHARE_IS_CLOSED);
         }
     }
@@ -206,4 +191,58 @@ public class Share {
             throw new GlobalException(ChatRoomExceptionType.SHARE_WRITER_CANNOT_LEAVE);
         }
     }
+
+    public boolean isCancel() {
+        return cancel;
+    }
+
+    public String getTitle() {
+        return title.getTitle();
+    }
+
+    public int getPrice() {
+        return price.getPrice();
+    }
+
+    public int getOriginalPrice() {
+        return originalPrice.getOriginalPrice();
+    }
+
+    public int getRecruitment() {
+        return recruitment.getRecruitment();
+    }
+
+    public boolean isLocationNegotiation() {
+        return locationNegotiation.isLocationNegotiation();
+    }
+
+    public boolean isPriceNegotiation() {
+        return priceNegotiation.isPriceNegotiation();
+    }
+
+    public String getLocationGuide() {
+        return locationGuide.getLocationGuide();
+    }
+
+    public String getLocation() {
+        return location.getLocation();
+    }
+
+    public double getLatitude() {
+        return latitude.getLatitude();
+    }
+
+    public double getLongitude() {
+        return longitude.getLongitude();
+    }
+
+    public String getDescription() {
+        return description.getDescription();
+    }
+
+    public LocalDateTime getClosedDateTime() {
+        return closedDateTime.getClosedDateTime();
+    }
+
+
 }
