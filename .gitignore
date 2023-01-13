@@ -113,7 +113,7 @@ $RECYCLE.BIN/
 
 ### macOS template
 # General
-.DSStore
+.DS_Store
 .AppleDouble
 .LSOverride
 
