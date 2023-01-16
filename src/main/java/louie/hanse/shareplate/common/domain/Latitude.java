@@ -19,10 +19,13 @@ public class Latitude {
         this.latitude = latitude;
     }
 
-    // TODO: KeywordLatitudeValidator의 로직을 validateLatitude 메서드에 추가, KeywordLatitudeValidator 제거
     private void validateLatitude(Double latitude) {
-        if (Objects.isNull(latitude)) {
+        if (Objects.isNull(latitude) || isOutOfKoreaLatitudeRange(latitude)) {
             throw new InvalidLatitudeException();
         }
+    }
+
+    private boolean isOutOfKoreaLatitudeRange(Double latitude) {
+        return 33.1 > latitude || latitude > 38.45;
     }
 }

@@ -20,8 +20,12 @@ public class Longitude {
     }
 
     private void validateLongitude(Double longitude) {
-        if (Objects.isNull(longitude)) {
+        if (Objects.isNull(longitude) || isOutOfKoreaLongitudeRange(longitude)) {
             throw new InvalidLongitudeException();
         }
+    }
+
+    private boolean isOutOfKoreaLongitudeRange(Double longitude) {
+        return 125.06666667 > longitude || longitude > 131.87222222;
     }
 }
