@@ -3,22 +3,26 @@ package louie.hanse.shareplate.common.exception.invalid.type;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import louie.hanse.shareplate.common.exception.invalid.InvalidException;
+import louie.hanse.shareplate.common.exception.invalid.InvalidLocationException;
 import louie.hanse.shareplate.core.keyword.exception.InvalidKeywordContentsException;
 import org.springframework.http.HttpStatus;
 
 public enum InvalidExceptionType {
 
 //    KEYWORD
-    INVALID_KEYWORD_CONTENTS("KEYWORD001", BAD_REQUEST, InvalidKeywordContentsException.class);
+    INVALID_KEYWORD_CONTENTS("KEYWORD001", BAD_REQUEST, InvalidKeywordContentsException.class),
+
+//    COMMON
+    INVALID_LOCATION("COMMON001", BAD_REQUEST, InvalidLocationException.class);
 
     private final String errorCode;
     private final HttpStatus statusCode;
     private final Class<? extends InvalidException> exception;
 
-    InvalidExceptionType(String errorCode, HttpStatus statusCode, Class<? extends InvalidException> exception) {
+    InvalidExceptionType(String errorCode, HttpStatus statusCode, Class<? extends InvalidException> exceptionClass) {
         this.errorCode = errorCode;
         this.statusCode = statusCode;
-        this.exception = exception;
+        this.exception = exceptionClass;
     }
 
     public String getErrorCode() {
