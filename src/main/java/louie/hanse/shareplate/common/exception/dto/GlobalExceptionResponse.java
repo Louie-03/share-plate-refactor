@@ -12,4 +12,9 @@ public class GlobalExceptionResponse {
         this.errorCode = globalException.getErrorCode();
         this.message = globalException.getMessage();
     }
+
+    public GlobalExceptionResponse(String errorCode, String message) {
+        this.errorCode = errorCode;
+        this.message = message;
+    }
 }
