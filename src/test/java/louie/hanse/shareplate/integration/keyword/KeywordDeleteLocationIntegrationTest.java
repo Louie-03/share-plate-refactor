@@ -1,7 +1,7 @@
 package louie.hanse.shareplate.integration.keyword;
 
 import static io.restassured.RestAssured.given;
-import static louie.hanse.shareplate.common.exception.type.KeywordExceptionType.EMPTY_KEYWORD_INFO;
+import static louie.hanse.shareplate.common.exception.invalid.type.InvalidExceptionType.INVALID_LOCATION;
 import static louie.hanse.shareplate.common.exception.type.KeywordExceptionType.KEYWORD_NOT_FOUND;
 import static louie.hanse.shareplate.common.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
 import static org.hamcrest.Matchers.equalTo;
@@ -68,9 +68,8 @@ class KeywordDeleteLocationIntegrationTest extends InitIntegrationTest {
             .delete("/keywords")
 
             .then()
-            .statusCode(EMPTY_KEYWORD_INFO.getStatusCode().value())
-            .body("errorCode", equalTo(EMPTY_KEYWORD_INFO.getErrorCode()))
-            .body("message", equalTo(EMPTY_KEYWORD_INFO.getMessage()));
+            .statusCode(INVALID_LOCATION.getStatusCode())
+            .body("errorCode", equalTo(INVALID_LOCATION.getErrorCode()));
     }
 
     @Test

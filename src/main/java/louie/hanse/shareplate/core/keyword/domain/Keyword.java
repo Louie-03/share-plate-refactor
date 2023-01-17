@@ -35,13 +35,13 @@ public class Keyword {
     private Latitude latitude;
     private Longitude longitude;
 
-    public Keyword(Member member, String contents, String location, Double latitude,
-        Double longitude) {
+    public Keyword(Member member, KeywordContents contents, Location location,
+        Latitude latitude, Longitude longitude) {
         this.member = member;
-        this.contents = new KeywordContents(contents);
-        this.location = new Location(location);
-        this.latitude = new Latitude(latitude);
-        this.longitude = new Longitude(longitude);
+        this.contents = contents;
+        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public void isNotMemberThrowException(Member member) {

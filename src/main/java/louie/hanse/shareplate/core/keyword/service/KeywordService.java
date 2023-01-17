@@ -2,16 +2,19 @@ package louie.hanse.shareplate.core.keyword.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import louie.hanse.shareplate.core.keyword.domain.Keyword;
-import louie.hanse.shareplate.core.member.domain.Member;
+import louie.hanse.shareplate.common.domain.Latitude;
+import louie.hanse.shareplate.common.domain.Location;
+import louie.hanse.shareplate.common.domain.Longitude;
 import louie.hanse.shareplate.common.exception.GlobalException;
 import louie.hanse.shareplate.common.exception.type.KeywordExceptionType;
-import louie.hanse.shareplate.core.member.service.MemberService;
-import louie.hanse.shareplate.core.keyword.repository.KeywordRepository;
+import louie.hanse.shareplate.core.keyword.domain.Keyword;
+import louie.hanse.shareplate.core.keyword.domain.KeywordContents;
 import louie.hanse.shareplate.core.keyword.dto.response.KeywordListResponse;
 import louie.hanse.shareplate.core.keyword.dto.response.KeywordLocationListResponse;
-import louie.hanse.shareplate.core.keyword.dto.request.KeywordRegisterRequest;
 import louie.hanse.shareplate.core.keyword.dto.response.KeywordRegisterResponse;
+import louie.hanse.shareplate.core.keyword.repository.KeywordRepository;
+import louie.hanse.shareplate.core.member.domain.Member;
+import louie.hanse.shareplate.core.member.service.MemberService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,11 +27,12 @@ public class KeywordService {
     private final MemberService memberService;
 
     @Transactional
-    public KeywordRegisterResponse register(KeywordRegisterRequest request, Long memberId) {
+    public KeywordRegisterResponse register(Long memberId, KeywordContents contents,
+        Location location, Latitude latitude, Longitude longitude) {
         Member member = memberService.findByIdOrElseThrow(memberId);
-        Keyword keyword = request.toEntity(member);
+        Keyword keyword = new Keyword(member, contents, location, latitude, longitude);
         boolean existKeyword = keywordRepository.existsByMemberIdAndContentsAndLocation(memberId,
-            request.getContents(), request.getLocation());
+            contents, location);
         if (existKeyword) {
             throw new GlobalException(KeywordExceptionType.DUPLICATE_KEYWORD);
         }
@@ -45,7 +49,7 @@ public class KeywordService {
     }
 
     @Transactional
-    public void deleteAll(Long memberId, String location) {
+    public void deleteAll(Long memberId, Location location) {
         memberService.findByIdOrElseThrow(memberId);
         boolean existKeyword = keywordRepository.existsByMemberIdAndLocation(memberId, location);
         if (!existKeyword) {
@@ -59,19 +63,15 @@ public class KeywordService {
         return keywordRepository.getKeywords(memberId);
     }
 
-    public KeywordLocationListResponse getLocations(Long memberId, String location) {
+    public KeywordLocationListResponse getLocations(Long memberId, Location location) {
         memberService.findByIdOrElseThrow(memberId);
-        List<Keyword> keywords = findAllByMemberIdAndLocation(memberId, location);
+        List<Keyword> keywords = keywordRepository.findAllByMemberIdAndLocation(
+            memberId, location);
 
         if (keywords.isEmpty()) {
             return new KeywordLocationListResponse();
         }
         return new KeywordLocationListResponse(keywords);
-    }
-
-    private List<Keyword> findAllByMemberIdAndLocation(Long memberId, String location) {
-        return keywordRepository.findAllByMemberIdAndLocation(
-            memberId, location);
     }
 
     private Keyword findWithMemberByIdOrElseThrow(Long id) {

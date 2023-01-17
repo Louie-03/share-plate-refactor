@@ -1,7 +1,7 @@
 package louie.hanse.shareplate.integration.keyword;
 
 import static io.restassured.RestAssured.given;
-import static louie.hanse.shareplate.common.exception.type.KeywordExceptionType.EMPTY_KEYWORD_INFO;
+import static louie.hanse.shareplate.common.exception.invalid.type.InvalidExceptionType.INVALID_LOCATION;
 import static louie.hanse.shareplate.common.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -59,7 +59,7 @@ public class KeywordLocationSearchIntegrationTest extends InitIntegrationTest {
     }
 
     @Test
-    void RequestParam값이_null값일_경우_예외를_발생시킨다() {
+    void location이_공백일_경우_예외를_발생시킨다() {
         String accessToken = jwtProvider.createAccessToken(2370842997L);
 
         given(documentationSpec)
@@ -72,9 +72,8 @@ public class KeywordLocationSearchIntegrationTest extends InitIntegrationTest {
             .get("/keywords/location")
 
             .then()
-            .statusCode(EMPTY_KEYWORD_INFO.getStatusCode().value())
-            .body("errorCode", equalTo(EMPTY_KEYWORD_INFO.getErrorCode()))
-            .body("message", equalTo(EMPTY_KEYWORD_INFO.getMessage()));
+            .statusCode(INVALID_LOCATION.getStatusCode())
+            .body("errorCode", equalTo(INVALID_LOCATION.getErrorCode()));
     }
 
     @Test

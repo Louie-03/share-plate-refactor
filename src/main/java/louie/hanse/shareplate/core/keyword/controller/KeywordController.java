@@ -3,16 +3,18 @@ package louie.hanse.shareplate.core.keyword.controller;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import louie.hanse.shareplate.core.keyword.service.KeywordService;
+import louie.hanse.shareplate.common.domain.Latitude;
+import louie.hanse.shareplate.common.domain.Location;
+import louie.hanse.shareplate.common.domain.Longitude;
+import louie.hanse.shareplate.core.keyword.domain.KeywordContents;
+import louie.hanse.shareplate.core.keyword.dto.request.KeywordRegisterRequest;
 import louie.hanse.shareplate.core.keyword.dto.response.KeywordListResponse;
 import louie.hanse.shareplate.core.keyword.dto.response.KeywordLocationListResponse;
-import louie.hanse.shareplate.core.keyword.dto.request.KeywordRegisterRequest;
 import louie.hanse.shareplate.core.keyword.dto.response.KeywordRegisterResponse;
+import louie.hanse.shareplate.core.keyword.service.KeywordService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,18 +41,24 @@ public class KeywordController {
 
     @GetMapping("/location")
     public KeywordLocationListResponse getLocations(
-        @NotBlank(message = "요청한 키워드정보 필드값이 비어있습니다.") @RequestParam(value = "location", required = false) String location,
+        @RequestParam(value = "location", required = false) String location,
         HttpServletRequest request) {
         Long memberId = (Long) request.getAttribute("memberId");
-        return keywordService.getLocations(memberId, location);
+        return keywordService.getLocations(memberId, new Location(location));
     }
 
     @PostMapping
     public KeywordRegisterResponse register(
-        @RequestBody @Valid KeywordRegisterRequest keywordRegisterRequest,
+        @RequestBody KeywordRegisterRequest keywordRegisterRequest,
         HttpServletRequest request) {
         Long memberId = (Long) request.getAttribute("memberId");
-        return keywordService.register(keywordRegisterRequest, memberId);
+        return keywordService.register(
+            memberId,
+            new KeywordContents(keywordRegisterRequest.getContents()),
+            new Location(keywordRegisterRequest.getLocation()),
+            new Latitude(keywordRegisterRequest.getLatitude()),
+            new Longitude(keywordRegisterRequest.getLongitude())
+        );
     }
 
     @DeleteMapping("/{id}")
@@ -63,10 +71,10 @@ public class KeywordController {
 
     @DeleteMapping
     public void deleteAll(
-        @RequestBody(required = false) @Valid Map<String, @Valid @NotNull(message = "요청한 키워드정보 필드값이 비어있습니다.") String> map,
+        @RequestBody(required = false) Map<String, String> map,
         HttpServletRequest request) {
         Long memberId = (Long) request.getAttribute("memberId");
-        String location = map.get("location");
+        Location location = new Location(map.get("location"));
         keywordService.deleteAll(memberId, location);
     }
 }
