@@ -1,15 +1,12 @@
 package louie.hanse.shareplate.core.keyword.controller;
 
 import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import louie.hanse.shareplate.common.domain.Latitude;
-import louie.hanse.shareplate.common.domain.Location;
-import louie.hanse.shareplate.common.domain.Longitude;
-import louie.hanse.shareplate.core.keyword.domain.KeywordContents;
+import louie.hanse.shareplate.core.keyword.dto.request.KeywordLocationDeleteRequest;
+import louie.hanse.shareplate.core.keyword.dto.request.KeywordLocationListRequest;
 import louie.hanse.shareplate.core.keyword.dto.request.KeywordRegisterRequest;
 import louie.hanse.shareplate.core.keyword.dto.response.KeywordListResponse;
 import louie.hanse.shareplate.core.keyword.dto.response.KeywordLocationListResponse;
@@ -22,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -41,10 +37,9 @@ public class KeywordController {
 
     @GetMapping("/location")
     public KeywordLocationListResponse getLocations(
-        @RequestParam(value = "location", required = false) String location,
-        HttpServletRequest request) {
+        KeywordLocationListRequest keywordLocationListRequest, HttpServletRequest request) {
         Long memberId = (Long) request.getAttribute("memberId");
-        return keywordService.getLocations(memberId, new Location(location));
+        return keywordService.getLocations(keywordLocationListRequest, memberId);
     }
 
     @PostMapping
@@ -52,13 +47,7 @@ public class KeywordController {
         @RequestBody KeywordRegisterRequest keywordRegisterRequest,
         HttpServletRequest request) {
         Long memberId = (Long) request.getAttribute("memberId");
-        return keywordService.register(
-            memberId,
-            new KeywordContents(keywordRegisterRequest.getContents()),
-            new Location(keywordRegisterRequest.getLocation()),
-            new Latitude(keywordRegisterRequest.getLatitude()),
-            new Longitude(keywordRegisterRequest.getLongitude())
-        );
+        return keywordService.register(keywordRegisterRequest, memberId);
     }
 
     @DeleteMapping("/{id}")
@@ -71,10 +60,9 @@ public class KeywordController {
 
     @DeleteMapping
     public void deleteAll(
-        @RequestBody(required = false) Map<String, String> map,
+        @RequestBody KeywordLocationDeleteRequest keywordLocationDeleteRequest,
         HttpServletRequest request) {
         Long memberId = (Long) request.getAttribute("memberId");
-        Location location = new Location(map.get("location"));
-        keywordService.deleteAll(memberId, location);
+        keywordService.deleteAll(keywordLocationDeleteRequest, memberId);
     }
 }
