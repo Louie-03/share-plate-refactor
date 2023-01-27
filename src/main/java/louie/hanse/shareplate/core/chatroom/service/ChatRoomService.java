@@ -70,6 +70,7 @@ public class ChatRoomService {
             Optional<Chat> optionalChat = chatRepository
                 .findTopByChatRoomIdOrderByWrittenDateTimeDesc(chatRoom.getId());
 
+//            TODO : DTO로 로직 옮기기
             if (chatRoom.getChatRoomMembers().size() == 1) {
                 chatRoomListResponses.add(
                     new ChatRoomListResponse(chatRoomMember, unreadCount, optionalChat));
