@@ -5,18 +5,21 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import louie.hanse.shareplate.common.exception.invalid.InvalidException;
 import louie.hanse.shareplate.common.exception.invalid.InvalidLatitudeException;
 import louie.hanse.shareplate.common.exception.invalid.InvalidLocationException;
+import louie.hanse.shareplate.common.exception.invalid.InvalidLongitudeException;
 import louie.hanse.shareplate.core.keyword.exception.InvalidKeywordContentsException;
 import org.springframework.http.HttpStatus;
 
 public enum InvalidExceptionType {
 
-//    KEYWORD
-    INVALID_KEYWORD_CONTENTS("KEYWORD001", BAD_REQUEST, InvalidKeywordContentsException.class),
-
 //    COMMON
     INVALID_LOCATION("COMMON001", BAD_REQUEST, InvalidLocationException.class),
     INVALID_LATITUDE("COMMON002", BAD_REQUEST, InvalidLatitudeException.class),
-    INVALID_LONGITUDE("COMMON003", BAD_REQUEST, InvalidLocationException.class);
+    INVALID_LONGITUDE("COMMON003", BAD_REQUEST, InvalidLongitudeException.class),
+
+//    SHARE
+
+//    KEYWORD
+    INVALID_KEYWORD_CONTENTS("KEYWORD001", BAD_REQUEST, InvalidKeywordContentsException.class);
 
     private final String errorCode;
     private final HttpStatus statusCode;
