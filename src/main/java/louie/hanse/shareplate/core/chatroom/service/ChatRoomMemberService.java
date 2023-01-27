@@ -47,7 +47,7 @@ public class ChatRoomMemberService {
         share.isWriterAndIsNotCancelThrowException(member);
         chatRoomMemberRepository.deleteByChatRoomIdAndMemberId(chatRoomId, memberId);
 
-        if (share.isNotEnd()) {
+        if (share.isNotClosed()) {
             entryRepository.deleteByMemberIdAndShareId(memberId, share.getId());
         }
     }
