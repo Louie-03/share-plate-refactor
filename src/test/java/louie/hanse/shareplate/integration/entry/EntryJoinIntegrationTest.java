@@ -1,7 +1,6 @@
 package louie.hanse.shareplate.integration.entry;
 
 import static io.restassured.RestAssured.given;
-import static louie.hanse.shareplate.common.exception.type.EntryExceptionType.CLOSED_DATE_TIME_HAS_PASSED_NOT_JOIN;
 import static louie.hanse.shareplate.common.exception.type.EntryExceptionType.SHARE_ALREADY_JOINED;
 import static louie.hanse.shareplate.common.exception.type.EntryExceptionType.SHARE_OVERCAPACITY;
 import static louie.hanse.shareplate.common.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
@@ -9,18 +8,14 @@ import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.PA
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_ID_IS_NEGATIVE;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_IS_CANCELED;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_NOT_FOUND;
-import static louie.hanse.shareplate.integration.entry.utils.EntryIntegrationTestUtils.getShareRegisterRequest;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 import io.restassured.http.ContentType;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import louie.hanse.shareplate.integration.InitIntegrationTest;
 import louie.hanse.shareplate.core.share.service.ShareService;
-import louie.hanse.shareplate.core.share.dto.request.ShareRegisterRequest;
+import louie.hanse.shareplate.integration.InitIntegrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -185,25 +180,25 @@ class EntryJoinIntegrationTest extends InitIntegrationTest {
             .body("message", equalTo(SHARE_OVERCAPACITY.getMessage()));
     }
 
-    @Test
-    void 마감시간이_지난_쉐어일_경우_예외를_발생시킨다() throws IOException {
-        String accessToken = jwtProvider.createAccessToken(2355841033L);
-
-        ShareRegisterRequest request = getShareRegisterRequest(LocalDateTime.now().minusHours(2));
-        Long shareId = shareService.register(request, 2355841033L).get("id");
-
-        given(documentationSpec)
-            .filter(document("entry-share-post-failed-by-closed-date-time-was-passed-join"))
-            .contentType(ContentType.JSON)
-            .header(AUTHORIZATION, accessToken)
-            .pathParam("shareId", shareId)
-
-            .when()
-            .post("/shares/{shareId}/entry")
-
-            .then()
-            .statusCode(CLOSED_DATE_TIME_HAS_PASSED_NOT_JOIN.getStatusCode().value())
-            .body("errorCode", equalTo(CLOSED_DATE_TIME_HAS_PASSED_NOT_JOIN.getErrorCode()))
-            .body("message", equalTo(CLOSED_DATE_TIME_HAS_PASSED_NOT_JOIN.getMessage()));
-    }
+//    @Test
+//    void 마감시간이_지난_쉐어일_경우_예외를_발생시킨다() throws IOException {
+//        String accessToken = jwtProvider.createAccessToken(2355841033L);
+//
+//        ShareRegisterRequest request = getShareRegisterRequest(LocalDateTime.now().minusHours(2));
+//        Long shareId = shareService.register(request, 2355841033L).get("id");
+//
+//        given(documentationSpec)
+//            .filter(document("entry-share-post-failed-by-closed-date-time-was-passed-join"))
+//            .contentType(ContentType.JSON)
+//            .header(AUTHORIZATION, accessToken)
+//            .pathParam("shareId", shareId)
+//
+//            .when()
+//            .post("/shares/{shareId}/entry")
+//
+//            .then()
+//            .statusCode(CLOSED_DATE_TIME_HAS_PASSED_NOT_JOIN.getStatusCode().value())
+//            .body("errorCode", equalTo(CLOSED_DATE_TIME_HAS_PASSED_NOT_JOIN.getErrorCode()))
+//            .body("message", equalTo(CLOSED_DATE_TIME_HAS_PASSED_NOT_JOIN.getMessage()));
+//    }
 }

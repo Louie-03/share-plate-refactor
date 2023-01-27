@@ -120,7 +120,7 @@ public class Share {
     }
 
     public boolean isClosed() {
-        return !closedDateTime.isClosed();
+        return closedDateTime.isClosed();
     }
 
     public boolean isLeftLessThanAnHour() {

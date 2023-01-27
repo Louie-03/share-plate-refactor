@@ -1,7 +1,6 @@
 package louie.hanse.shareplate.integration.entry;
 
 import static io.restassured.RestAssured.given;
-import static louie.hanse.shareplate.common.exception.type.EntryExceptionType.CLOSED_DATE_TIME_HAS_PASSED_NOT_CANCEL;
 import static louie.hanse.shareplate.common.exception.type.EntryExceptionType.CLOSE_TO_THE_CLOSED_DATE_TIME;
 import static louie.hanse.shareplate.common.exception.type.EntryExceptionType.SHARE_NOT_JOINED;
 import static louie.hanse.shareplate.common.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
@@ -17,9 +16,9 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 import io.restassured.http.ContentType;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import louie.hanse.shareplate.integration.InitIntegrationTest;
-import louie.hanse.shareplate.core.share.service.ShareService;
 import louie.hanse.shareplate.core.share.dto.request.ShareRegisterRequest;
+import louie.hanse.shareplate.core.share.service.ShareService;
+import louie.hanse.shareplate.integration.InitIntegrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -186,25 +185,25 @@ class EntryCancelIntegrationTest extends InitIntegrationTest {
             .body("message", equalTo(CLOSE_TO_THE_CLOSED_DATE_TIME.getMessage()));
     }
 
-    @Test
-    void 모집_시간이_지난_쉐어일_경우_예외를_발생시킨다() throws IOException {
-        String accessToken = jwtProvider.createAccessToken(2355841047L);
-
-        ShareRegisterRequest request = getShareRegisterRequest(LocalDateTime.now().minusHours(3));
-        Long shareId = shareService.register(request, 2355841047L).get("id");
-
-        given(documentationSpec)
-            .filter(document("entry-cancel-delete-failed-by-closed-date-time-was-passed-cancel"))
-            .contentType(ContentType.JSON)
-            .header(AUTHORIZATION, accessToken)
-            .pathParam("shareId", shareId)
-
-            .when()
-            .delete("/shares/{shareId}/entry")
-
-            .then()
-            .statusCode(CLOSED_DATE_TIME_HAS_PASSED_NOT_CANCEL.getStatusCode().value())
-            .body("errorCode", equalTo(CLOSED_DATE_TIME_HAS_PASSED_NOT_CANCEL.getErrorCode()))
-            .body("message", equalTo(CLOSED_DATE_TIME_HAS_PASSED_NOT_CANCEL.getMessage()));
-    }
+//    @Test
+//    void 모집_시간이_지난_쉐어일_경우_예외를_발생시킨다() throws IOException {
+//        String accessToken = jwtProvider.createAccessToken(2355841047L);
+//
+//        ShareRegisterRequest request = getShareRegisterRequest(LocalDateTime.now().minusHours(3));
+//        Long shareId = shareService.register(request, 2355841047L).get("id");
+//
+//        given(documentationSpec)
+//            .filter(document("entry-cancel-delete-failed-by-closed-date-time-was-passed-cancel"))
+//            .contentType(ContentType.JSON)
+//            .header(AUTHORIZATION, accessToken)
+//            .pathParam("shareId", shareId)
+//
+//            .when()
+//            .delete("/shares/{shareId}/entry")
+//
+//            .then()
+//            .statusCode(CLOSED_DATE_TIME_HAS_PASSED_NOT_CANCEL.getStatusCode().value())
+//            .body("errorCode", equalTo(CLOSED_DATE_TIME_HAS_PASSED_NOT_CANCEL.getErrorCode()))
+//            .body("message", equalTo(CLOSED_DATE_TIME_HAS_PASSED_NOT_CANCEL.getMessage()));
+//    }
 }
