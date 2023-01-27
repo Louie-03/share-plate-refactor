@@ -44,7 +44,7 @@ public class ClosedDateTime {
         }
     }
 
-    private boolean isPastTime(LocalDateTime localDateTime) {
-        return LocalDateTime.now().isBefore(localDateTime);
+    private boolean isPastTime(LocalDateTime closedDateTime) {
+        return closedDateTime.isBefore(LocalDateTime.now());
     }
 }
