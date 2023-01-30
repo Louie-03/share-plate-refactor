@@ -2,16 +2,19 @@ package louie.hanse.shareplate.integration.share;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.MULTIPART;
+import static louie.hanse.shareplate.common.exception.invalid.type.InvalidExceptionType.INVALID_CLOSED_DATE_TIME;
+import static louie.hanse.shareplate.common.exception.invalid.type.InvalidExceptionType.INVALID_LATITUDE;
+import static louie.hanse.shareplate.common.exception.invalid.type.InvalidExceptionType.INVALID_LONGITUDE;
+import static louie.hanse.shareplate.common.exception.invalid.type.InvalidExceptionType.INVALID_ORIGINAL_PRICE;
+import static louie.hanse.shareplate.common.exception.invalid.type.InvalidExceptionType.INVALID_PRICE;
+import static louie.hanse.shareplate.common.exception.invalid.type.InvalidExceptionType.INVALID_RECRUITMENT;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.CLOSE_TO_THE_CLOSED_DATE_TIME_CANNOT_EDIT;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.EMPTY_SHARE_INFO;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.IMAGE_LIMIT_EXCEEDED;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.IS_NOT_WRITER;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.NOT_SUPPORT_IMAGE_TYPE;
-import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.OUT_OF_SCOPE_FOR_KOREA;
-import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.PAST_CLOSED_DATE_TIME;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.PATH_VARIABLE_EMPTY_SHARE_ID;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_ID_IS_NEGATIVE;
-import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_INFO_IS_NEGATIVE;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_IS_CANCELED;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_IS_CLOSED;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_NOT_FOUND;
@@ -26,8 +29,8 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import louie.hanse.shareplate.integration.InitIntegrationTest;
 import louie.hanse.shareplate.core.share.service.ShareService;
+import louie.hanse.shareplate.integration.InitIntegrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -215,9 +218,8 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .put("/shares/{id}")
 
             .then()
-            .statusCode(OUT_OF_SCOPE_FOR_KOREA.getStatusCode().value())
-            .body("errorCode", equalTo(OUT_OF_SCOPE_FOR_KOREA.getErrorCode()))
-            .body("message", equalTo(OUT_OF_SCOPE_FOR_KOREA.getMessage()));
+            .statusCode(INVALID_LATITUDE.getStatusCode())
+            .body("errorCode", equalTo(INVALID_LATITUDE.getErrorCode()));
     }
 
     @Test
@@ -252,9 +254,8 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .put("/shares/{id}")
 
             .then()
-            .statusCode(OUT_OF_SCOPE_FOR_KOREA.getStatusCode().value())
-            .body("errorCode", equalTo(OUT_OF_SCOPE_FOR_KOREA.getErrorCode()))
-            .body("message", equalTo(OUT_OF_SCOPE_FOR_KOREA.getMessage()));
+            .statusCode(INVALID_LONGITUDE.getStatusCode())
+            .body("errorCode", equalTo(INVALID_LONGITUDE.getErrorCode()));
     }
 
     @Test
@@ -289,9 +290,8 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .put("/shares/{id}")
 
             .then()
-            .statusCode(PAST_CLOSED_DATE_TIME.getStatusCode().value())
-            .body("errorCode", equalTo(PAST_CLOSED_DATE_TIME.getErrorCode()))
-            .body("message", equalTo(PAST_CLOSED_DATE_TIME.getMessage()));
+            .statusCode(INVALID_CLOSED_DATE_TIME.getStatusCode())
+            .body("errorCode", equalTo(INVALID_CLOSED_DATE_TIME.getErrorCode()));
     }
 
     @Test
@@ -325,9 +325,8 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .put("/shares/{id}")
 
             .then()
-            .statusCode(SHARE_INFO_IS_NEGATIVE.getStatusCode().value())
-            .body("errorCode", equalTo(SHARE_INFO_IS_NEGATIVE.getErrorCode()))
-            .body("message", equalTo(SHARE_INFO_IS_NEGATIVE.getMessage()));
+            .statusCode(INVALID_RECRUITMENT.getStatusCode())
+            .body("errorCode", equalTo(INVALID_RECRUITMENT.getErrorCode()));
     }
 
     @Test
@@ -361,9 +360,8 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .put("/shares/{id}")
 
             .then()
-            .statusCode(SHARE_INFO_IS_NEGATIVE.getStatusCode().value())
-            .body("errorCode", equalTo(SHARE_INFO_IS_NEGATIVE.getErrorCode()))
-            .body("message", equalTo(SHARE_INFO_IS_NEGATIVE.getMessage()));
+            .statusCode(INVALID_PRICE.getStatusCode())
+            .body("errorCode", equalTo(INVALID_PRICE.getErrorCode()));
     }
 
     @Test
@@ -397,9 +395,8 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
             .put("/shares/{id}")
 
             .then()
-            .statusCode(SHARE_INFO_IS_NEGATIVE.getStatusCode().value())
-            .body("errorCode", equalTo(SHARE_INFO_IS_NEGATIVE.getErrorCode()))
-            .body("message", equalTo(SHARE_INFO_IS_NEGATIVE.getMessage()));
+            .statusCode(INVALID_ORIGINAL_PRICE.getStatusCode())
+            .body("errorCode", equalTo(INVALID_ORIGINAL_PRICE.getErrorCode()));
     }
 
     @Test
