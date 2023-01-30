@@ -2,11 +2,12 @@ package louie.hanse.shareplate.integration.share;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.MULTIPART;
+import static louie.hanse.shareplate.common.exception.invalid.type.InvalidExceptionType.INVALID_CLOSED_DATE_TIME;
+import static louie.hanse.shareplate.common.exception.invalid.type.InvalidExceptionType.INVALID_LATITUDE;
+import static louie.hanse.shareplate.common.exception.invalid.type.InvalidExceptionType.INVALID_LONGITUDE;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.EMPTY_SHARE_INFO;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.IMAGE_LIMIT_EXCEEDED;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.NOT_SUPPORT_IMAGE_TYPE;
-import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.OUT_OF_SCOPE_FOR_KOREA;
-import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.PAST_CLOSED_DATE_TIME;
 import static louie.hanse.shareplate.integration.share.utils.ShareIntegrationTestUtils.createMultiPartSpecification;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -199,9 +200,8 @@ class ShareRegisterIntegrationTest extends InitIntegrationTest {
             .post("/shares")
 
             .then()
-            .statusCode(OUT_OF_SCOPE_FOR_KOREA.getStatusCode().value())
-            .body("errorCode", equalTo(OUT_OF_SCOPE_FOR_KOREA.getErrorCode()))
-            .body("message", equalTo(OUT_OF_SCOPE_FOR_KOREA.getMessage()));
+            .statusCode(INVALID_LATITUDE.getStatusCode())
+            .body("errorCode", equalTo(INVALID_LATITUDE.getErrorCode()));
     }
 
     @Test
@@ -235,9 +235,8 @@ class ShareRegisterIntegrationTest extends InitIntegrationTest {
             .post("/shares")
 
             .then()
-            .statusCode(OUT_OF_SCOPE_FOR_KOREA.getStatusCode().value())
-            .body("errorCode", equalTo(OUT_OF_SCOPE_FOR_KOREA.getErrorCode()))
-            .body("message", equalTo(OUT_OF_SCOPE_FOR_KOREA.getMessage()));
+            .statusCode(INVALID_LONGITUDE.getStatusCode())
+            .body("errorCode", equalTo(INVALID_LONGITUDE.getErrorCode()));
     }
 
     @Test
@@ -271,8 +270,7 @@ class ShareRegisterIntegrationTest extends InitIntegrationTest {
             .post("/shares")
 
             .then()
-            .statusCode(PAST_CLOSED_DATE_TIME.getStatusCode().value())
-            .body("errorCode", equalTo(PAST_CLOSED_DATE_TIME.getErrorCode()))
-            .body("message", equalTo(PAST_CLOSED_DATE_TIME.getMessage()));
+            .statusCode(INVALID_CLOSED_DATE_TIME.getStatusCode())
+            .body("errorCode", equalTo(INVALID_CLOSED_DATE_TIME.getErrorCode()));
     }
 }

@@ -9,11 +9,11 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import louie.hanse.shareplate.common.domain.Location;
 import louie.hanse.shareplate.core.keyword.domain.Keyword;
+import louie.hanse.shareplate.core.keyword.domain.KeywordContents;
 import louie.hanse.shareplate.core.keyword.dto.response.KeywordListResponse;
 
 @RequiredArgsConstructor
-public class CustomKeywordRepositoryImpl implements
-    louie.hanse.shareplate.core.keyword.repository.CustomKeywordRepository {
+public class CustomKeywordRepositoryImpl implements CustomKeywordRepository {
 
     private final JPAQueryFactory queryFactory;
 
@@ -41,28 +41,28 @@ public class CustomKeywordRepositoryImpl implements
     }
 
     @Override
-    public boolean existsByMemberIdAndContentsAndLocation(Long memberId, String contents,
-        String location) {
+    public boolean existsByMemberIdAndContentsAndLocation(Long memberId, KeywordContents contents,
+        Location location) {
         Integer result = queryFactory
             .selectOne()
             .from(keyword)
             .where(
                 keyword.member.id.eq(memberId),
-                keyword.contents.contents.eq(contents),
-                keyword.location.location.eq(location)
+                keyword.contents.eq(contents),
+                keyword.location.eq(location)
             ).fetchFirst();
 
         return !isNull(result);
     }
 
     @Override
-    public boolean existsByMemberIdAndLocation(Long memberId, String location) {
+    public boolean existsByMemberIdAndLocation(Long memberId, Location location) {
         Integer result = queryFactory
             .selectOne()
             .from(keyword)
             .where(
                 keyword.member.id.eq(memberId),
-                keyword.location.location.eq(location)
+                keyword.location.eq(location)
             ).fetchFirst();
 
         return !isNull(result);

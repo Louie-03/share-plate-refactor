@@ -115,12 +115,12 @@ public class Share {
         this.chatRooms.add(chatRoom);
     }
 
-    public boolean isNotEnd() {
-        return closedDateTime.isNotEnd();
+    public boolean isNotClosed() {
+        return closedDateTime.isNotClosed();
     }
 
-    public boolean isEnd() {
-        return !isNotEnd();
+    public boolean isClosed() {
+        return closedDateTime.isClosed();
     }
 
     public boolean isLeftLessThanAnHour() {

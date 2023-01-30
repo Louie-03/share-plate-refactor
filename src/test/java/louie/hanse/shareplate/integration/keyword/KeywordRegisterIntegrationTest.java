@@ -1,10 +1,11 @@
 package louie.hanse.shareplate.integration.keyword;
 
 import static io.restassured.RestAssured.given;
+import static louie.hanse.shareplate.common.exception.invalid.type.InvalidExceptionType.INVALID_KEYWORD_CONTENTS;
+import static louie.hanse.shareplate.common.exception.invalid.type.InvalidExceptionType.INVALID_LATITUDE;
+import static louie.hanse.shareplate.common.exception.invalid.type.InvalidExceptionType.INVALID_LOCATION;
 import static louie.hanse.shareplate.common.exception.type.KeywordExceptionType.DUPLICATE_KEYWORD;
-import static louie.hanse.shareplate.common.exception.type.KeywordExceptionType.EMPTY_KEYWORD_INFO;
 import static louie.hanse.shareplate.common.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
-import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.OUT_OF_SCOPE_FOR_KOREA;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
@@ -44,13 +45,13 @@ class KeywordRegisterIntegrationTest extends InitIntegrationTest {
     }
 
     @Test
-    void 필수_필드값이_null값일_경우_예외를_발생시킨다() {
+    void keyword가_비어있는_경우_예외를_발생시킨다() {
         String accessToken = jwtProvider.createAccessToken(2355841047L);
 
         Map<String, Object> requestBody = Map.of(
             "location", "목동",
-            "longitude", 126.872879,
-            "contents", "떡볶이"
+            "latitude", 37.5370192,
+            "longitude", 126.872879
         );
 
         given(documentationSpec)
@@ -63,9 +64,32 @@ class KeywordRegisterIntegrationTest extends InitIntegrationTest {
             .post("/keywords")
 
             .then()
-            .statusCode(EMPTY_KEYWORD_INFO.getStatusCode().value())
-            .body("errorCode", equalTo(EMPTY_KEYWORD_INFO.getErrorCode()))
-            .body("message", equalTo(EMPTY_KEYWORD_INFO.getMessage()));
+            .statusCode(INVALID_KEYWORD_CONTENTS.getStatusCode())
+            .body("errorCode", equalTo(INVALID_KEYWORD_CONTENTS.getErrorCode()));
+    }
+
+    @Test
+    void location이_비어있는_경우_예외를_발생시킨다() {
+        String accessToken = jwtProvider.createAccessToken(2355841047L);
+
+        Map<String, Object> requestBody = Map.of(
+            "contents", "햄버거",
+            "latitude", 37.5370192,
+            "longitude", 126.872879
+        );
+
+        given(documentationSpec)
+            .filter(document("keyword-register-post-failed-by-empty-keyword-info"))
+            .contentType(ContentType.JSON)
+            .header(AUTHORIZATION, accessToken)
+            .body(requestBody)
+
+            .when()
+            .post("/keywords")
+
+            .then()
+            .statusCode(INVALID_LOCATION.getStatusCode())
+            .body("errorCode", equalTo(INVALID_LOCATION.getErrorCode()));
     }
 
     @Test
@@ -121,7 +145,7 @@ class KeywordRegisterIntegrationTest extends InitIntegrationTest {
     }
 
     @Test
-    void 대한민국_위도_경도가_아닐_경우_예외를_발생시킨다() {
+    void 대한민국_위도_경도를_벗어난_경우_예외를_발생시킨다() {
         String accessToken = jwtProvider.createAccessToken(2355841047L);
 
         Map<String, Object> requestBody = Map.of(
@@ -141,9 +165,8 @@ class KeywordRegisterIntegrationTest extends InitIntegrationTest {
             .post("/keywords")
 
             .then()
-            .statusCode(OUT_OF_SCOPE_FOR_KOREA.getStatusCode().value())
-            .body("errorCode", equalTo(OUT_OF_SCOPE_FOR_KOREA.getErrorCode()))
-            .body("message", equalTo(OUT_OF_SCOPE_FOR_KOREA.getMessage()));
+            .statusCode(INVALID_LATITUDE.getStatusCode())
+            .body("errorCode", equalTo(INVALID_LATITUDE.getErrorCode()));
     }
 
 }

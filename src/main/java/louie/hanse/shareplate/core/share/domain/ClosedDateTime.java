@@ -22,19 +22,6 @@ public class ClosedDateTime {
         this.closedDateTime = closedDateTime;
     }
 
-    public boolean isNotEnd() {
-        if (closedDateTime.compareTo(LocalDateTime.now()) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    private void validateClosedDateTime(LocalDateTime closedDateTime) {
-        if (Objects.isNull(closedDateTime)) {
-            throw new InvalidClosedDateTimeException();
-        }
-    }
-
     public boolean isLeftLessThanAnHour() {
         LocalDateTime leftAnHour = closedDateTime.minusHours(1);
         if (leftAnHour.compareTo(LocalDateTime.now()) < 0) {
@@ -44,6 +31,20 @@ public class ClosedDateTime {
     }
 
     public boolean isClosed() {
+        return isPastTime(closedDateTime);
+    }
+
+    public boolean isNotClosed() {
+        return !isClosed();
+    }
+
+    private void validateClosedDateTime(LocalDateTime closedDateTime) {
+        if (Objects.isNull(closedDateTime) || isPastTime(closedDateTime)) {
+            throw new InvalidClosedDateTimeException();
+        }
+    }
+
+    private boolean isPastTime(LocalDateTime closedDateTime) {
         return closedDateTime.isBefore(LocalDateTime.now());
     }
 }

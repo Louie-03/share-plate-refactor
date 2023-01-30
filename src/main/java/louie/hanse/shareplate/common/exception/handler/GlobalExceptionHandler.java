@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ValidationException;
 import louie.hanse.shareplate.common.exception.GlobalException;
+import louie.hanse.shareplate.common.exception.invalid.InvalidException;
+import louie.hanse.shareplate.common.exception.invalid.type.InvalidExceptionType;
 import louie.hanse.shareplate.common.exception.type.AuthExceptionType;
 import louie.hanse.shareplate.common.exception.type.ChatRoomExceptionType;
 import louie.hanse.shareplate.common.exception.type.EntryExceptionType;
@@ -43,6 +45,14 @@ public class GlobalExceptionHandler {
             .body(new GlobalExceptionResponse(new GlobalException(exceptionType)));
     }
 
+    @ExceptionHandler(InvalidException.class)
+    public ResponseEntity<GlobalExceptionResponse> invalidExceptionResponse(InvalidException exception) {
+        InvalidExceptionType invalidExceptionType = findInvalidExceptionType(exception);
+        return ResponseEntity.status(invalidExceptionType.getStatusCode())
+            .body(new GlobalExceptionResponse(invalidExceptionType.getErrorCode(),
+                exception.getMessage()));
+    }
+
     private ExceptionType findExceptionType(String message) {
         List<ExceptionType> exceptionTypes = createExceptionTypes();
         for (ExceptionType exceptionType : exceptionTypes) {
@@ -54,10 +64,25 @@ public class GlobalExceptionHandler {
         return null;
     }
 
+    private InvalidExceptionType findInvalidExceptionType(InvalidException exception) {
+        List<InvalidExceptionType> invalidExceptionTypes = Arrays.stream(
+                InvalidExceptionType.values())
+            .collect(Collectors.toList());
+        for (InvalidExceptionType invalidExceptionType : invalidExceptionTypes) {
+            if (exception.getClass() == invalidExceptionType.getException()) {
+                return invalidExceptionType;
+            }
+        }
+        return null;
+    }
+
+
+    //    TODO : 해당 메서드 지우기
     private String getMessage(Exception ex) {
         return ex.getMessage();
     }
 
+    //    TODO : 중복 로직 제거하기
     private List<ExceptionType> createExceptionTypes() {
         List<ExceptionType> exceptionTypes = new ArrayList<>();
         exceptionTypes.addAll(

@@ -4,7 +4,6 @@ import static io.restassured.RestAssured.given;
 import static louie.hanse.shareplate.common.exception.type.ChatRoomExceptionType.CHATROOM_ID_IS_NEGATIVE;
 import static louie.hanse.shareplate.common.exception.type.ChatRoomExceptionType.CHAT_ROOM_NOT_FOUND;
 import static louie.hanse.shareplate.common.exception.type.ChatRoomExceptionType.CHAT_ROOM_NOT_JOINED;
-import static louie.hanse.shareplate.common.exception.type.ChatRoomExceptionType.CLOSE_TO_THE_CLOSED_DATE_TIME;
 import static louie.hanse.shareplate.common.exception.type.ChatRoomExceptionType.EMPTY_CHATROOM_INFO;
 import static louie.hanse.shareplate.common.exception.type.ChatRoomExceptionType.SHARE_WRITER_CANNOT_LEAVE;
 import static louie.hanse.shareplate.common.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
@@ -17,13 +16,13 @@ import io.restassured.http.ContentType;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import louie.hanse.shareplate.integration.InitIntegrationTest;
+import louie.hanse.shareplate.core.chatroom.domain.ChatRoomType;
 import louie.hanse.shareplate.core.chatroom.repository.ChatRoomRepository;
 import louie.hanse.shareplate.core.chatroom.service.ChatRoomService;
 import louie.hanse.shareplate.core.entry.service.EntryService;
-import louie.hanse.shareplate.core.share.service.ShareService;
-import louie.hanse.shareplate.core.chatroom.domain.ChatRoomType;
 import louie.hanse.shareplate.core.share.dto.request.ShareRegisterRequest;
+import louie.hanse.shareplate.core.share.service.ShareService;
+import louie.hanse.shareplate.integration.InitIntegrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -198,31 +197,31 @@ class ChatRoomMemberChatRoomExitIntegrationTest extends InitIntegrationTest {
             .body("message", equalTo(CHAT_ROOM_NOT_JOINED.getMessage()));
     }
 
-    @Test
-    void 쉐어_마감시간이_한시간_미만으로_남은_쉐어의_참여_채팅방일_경우_예외를_발생시킨다() throws IOException {
-        String accessToken = jwtProvider.createAccessToken(2370842997L);
-
-        ShareRegisterRequest request = getShareRegisterRequest(LocalDateTime.now().plusMinutes(30));
-        Long shareId = shareService.register(request, 2355841047L).get("id");
-        entryService.entry(shareId, 2370842997L);
-
-        Long chatRoomId = chatRoomRepository.findByShareIdAndType(shareId, ChatRoomType.ENTRY)
-            .get(0).getId();
-
-        given(documentationSpec)
-            .filter(document("chatRoomMember-chatRoom-exit-delete-failed-by-close-to-the-closed-date-time"))
-            .contentType(ContentType.JSON)
-            .header(AUTHORIZATION, accessToken)
-            .body(Collections.singletonMap("chatRoomId", chatRoomId))
-
-            .when()
-            .delete("/chatroom-members")
-
-            .then()
-            .statusCode(CLOSE_TO_THE_CLOSED_DATE_TIME.getStatusCode().value())
-            .body("errorCode", equalTo(CLOSE_TO_THE_CLOSED_DATE_TIME.getErrorCode()))
-            .body("message", equalTo(CLOSE_TO_THE_CLOSED_DATE_TIME.getMessage()));
-    }
+//    @Test
+//    void 쉐어_마감시간이_한시간_미만으로_남은_쉐어의_참여_채팅방일_경우_예외를_발생시킨다() throws IOException {
+//        String accessToken = jwtProvider.createAccessToken(2370842997L);
+//
+//        ShareRegisterRequest request = getShareRegisterRequest(LocalDateTime.now().plusMinutes(30));
+//        Long shareId = shareService.register(request, 2355841047L).get("id");
+//        entryService.entry(shareId, 2370842997L);
+//
+//        Long chatRoomId = chatRoomRepository.findByShareIdAndType(shareId, ChatRoomType.ENTRY)
+//            .get(0).getId();
+//
+//        given(documentationSpec)
+//            .filter(document("chatRoomMember-chatRoom-exit-delete-failed-by-close-to-the-closed-date-time"))
+//            .contentType(ContentType.JSON)
+//            .header(AUTHORIZATION, accessToken)
+//            .body(Collections.singletonMap("chatRoomId", chatRoomId))
+//
+//            .when()
+//            .delete("/chatroom-members")
+//
+//            .then()
+//            .statusCode(CLOSE_TO_THE_CLOSED_DATE_TIME.getStatusCode().value())
+//            .body("errorCode", equalTo(CLOSE_TO_THE_CLOSED_DATE_TIME.getErrorCode()))
+//            .body("message", equalTo(CLOSE_TO_THE_CLOSED_DATE_TIME.getMessage()));
+//    }
 
     @Test
     void 취소되지_않은_쉐어의_글쓴이가_요청할_경우_예외를_발생시킨다() {

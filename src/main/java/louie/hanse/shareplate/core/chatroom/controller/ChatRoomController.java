@@ -8,17 +8,16 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import louie.hanse.shareplate.core.chatroom.service.ChatRoomService;
-import louie.hanse.shareplate.core.chatroom.domain.ChatRoomType;
+import louie.hanse.shareplate.core.chatroom.dto.request.ChatRoomListRequest;
 import louie.hanse.shareplate.core.chatroom.dto.response.ChatRoomDetailResponse;
 import louie.hanse.shareplate.core.chatroom.dto.response.ChatRoomListResponse;
+import louie.hanse.shareplate.core.chatroom.service.ChatRoomService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -31,17 +30,18 @@ public class ChatRoomController {
 
     @GetMapping("/{id}")
     public ChatRoomDetailResponse chatRoomDetail(
-        @PathVariable(required = false) @NotNull(message = "PathVariable의 ChatroomId가 비어있습니다.") @Positive(message = "채팅방 id는 양수여야 합니다.") Long id,
+        @PathVariable(required = false) @NotNull(message = "PathVariable의 ChatroomId가 비어있습니다.")
+        @Positive(message = "채팅방 id는 양수여야 합니다.") Long id,
         HttpServletRequest request) {
         Long memberId = (Long) request.getAttribute("memberId");
         return chatRoomService.getDetail(id, memberId);
     }
 
     @GetMapping
-    public List<ChatRoomListResponse> chatRoomList(HttpServletRequest request,
-        @Valid @RequestParam(required = false) @NotNull(message = "요청한 채팅방정보 필드값이 비어있습니다.") ChatRoomType type) {
+    public List<ChatRoomListResponse> chatRoomList(@Valid ChatRoomListRequest chatRoomListRequest,
+        HttpServletRequest request) {
         Long memberId = (Long) request.getAttribute("memberId");
-        return chatRoomService.getList(memberId, type);
+        return chatRoomService.getList(chatRoomListRequest, memberId);
     }
 
     @PostMapping

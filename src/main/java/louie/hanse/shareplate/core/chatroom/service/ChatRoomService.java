@@ -9,6 +9,7 @@ import louie.hanse.shareplate.core.chat.domain.Chat;
 import louie.hanse.shareplate.core.chatroom.domain.ChatLog;
 import louie.hanse.shareplate.core.chatroom.domain.ChatRoom;
 import louie.hanse.shareplate.core.chatroom.domain.ChatRoomMember;
+import louie.hanse.shareplate.core.chatroom.dto.request.ChatRoomListRequest;
 import louie.hanse.shareplate.core.member.domain.Member;
 import louie.hanse.shareplate.core.member.service.MemberService;
 import louie.hanse.shareplate.core.share.domain.Share;
@@ -59,10 +60,10 @@ public class ChatRoomService {
         return new ChatRoomDetailResponse(chatRoomMember, member);
     }
 
-    public List<ChatRoomListResponse> getList(Long memberId, ChatRoomType type) {
+    public List<ChatRoomListResponse> getList(ChatRoomListRequest request, Long memberId) {
         memberService.findByIdOrElseThrow(memberId);
         List<ChatRoomMember> chatRoomMembers = chatRoomMemberRepository
-            .findAllByMemberIdAndChatRoomType(memberId, type);
+            .findAllByMemberIdAndChatRoomType(memberId, request.getType());
         List<ChatRoomListResponse> chatRoomListResponses = new ArrayList<>();
         for (ChatRoomMember chatRoomMember : chatRoomMembers) {
             ChatRoom chatRoom = chatRoomMember.getChatRoom();
@@ -70,6 +71,7 @@ public class ChatRoomService {
             Optional<Chat> optionalChat = chatRepository
                 .findTopByChatRoomIdOrderByWrittenDateTimeDesc(chatRoom.getId());
 
+//            TODO : DTO로 로직 옮기기
             if (chatRoom.getChatRoomMembers().size() == 1) {
                 chatRoomListResponses.add(
                     new ChatRoomListResponse(chatRoomMember, unreadCount, optionalChat));

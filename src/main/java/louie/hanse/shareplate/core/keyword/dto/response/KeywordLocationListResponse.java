@@ -1,6 +1,5 @@
 package louie.hanse.shareplate.core.keyword.dto.response;
 
-import com.querydsl.core.annotations.QueryProjection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +15,6 @@ public class KeywordLocationListResponse {
     private Double latitude;
     private List<KeywordDetailResponse> keywords = new ArrayList<>();
 
-    @QueryProjection
     public KeywordLocationListResponse(List<Keyword> keywords) {
         this.longitude = keywords.get(0).getLongitude();
         this.latitude = keywords.get(0).getLatitude();

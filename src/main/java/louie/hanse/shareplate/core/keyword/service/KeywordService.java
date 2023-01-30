@@ -2,16 +2,19 @@ package louie.hanse.shareplate.core.keyword.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import louie.hanse.shareplate.core.keyword.domain.Keyword;
-import louie.hanse.shareplate.core.member.domain.Member;
+import louie.hanse.shareplate.common.domain.Location;
 import louie.hanse.shareplate.common.exception.GlobalException;
 import louie.hanse.shareplate.common.exception.type.KeywordExceptionType;
-import louie.hanse.shareplate.core.member.service.MemberService;
-import louie.hanse.shareplate.core.keyword.repository.KeywordRepository;
+import louie.hanse.shareplate.core.keyword.domain.Keyword;
+import louie.hanse.shareplate.core.keyword.dto.request.KeywordLocationDeleteRequest;
+import louie.hanse.shareplate.core.keyword.dto.request.KeywordLocationListRequest;
+import louie.hanse.shareplate.core.keyword.dto.request.KeywordRegisterRequest;
 import louie.hanse.shareplate.core.keyword.dto.response.KeywordListResponse;
 import louie.hanse.shareplate.core.keyword.dto.response.KeywordLocationListResponse;
-import louie.hanse.shareplate.core.keyword.dto.request.KeywordRegisterRequest;
 import louie.hanse.shareplate.core.keyword.dto.response.KeywordRegisterResponse;
+import louie.hanse.shareplate.core.keyword.repository.KeywordRepository;
+import louie.hanse.shareplate.core.member.domain.Member;
+import louie.hanse.shareplate.core.member.service.MemberService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,13 +29,15 @@ public class KeywordService {
     @Transactional
     public KeywordRegisterResponse register(KeywordRegisterRequest request, Long memberId) {
         Member member = memberService.findByIdOrElseThrow(memberId);
+        Keyword keyword = request.toEntity(member);
         boolean existKeyword = keywordRepository.existsByMemberIdAndContentsAndLocation(memberId,
             request.getContents(), request.getLocation());
         if (existKeyword) {
             throw new GlobalException(KeywordExceptionType.DUPLICATE_KEYWORD);
         }
-        Keyword keyword = request.toEntity(member);
+
         keywordRepository.save(keyword);
+
         return new KeywordRegisterResponse(keyword);
     }
 
@@ -41,37 +46,40 @@ public class KeywordService {
         Member member = memberService.findByIdOrElseThrow(memberId);
         Keyword keyword = findWithMemberByIdOrElseThrow(id);
         keyword.isNotMemberThrowException(member);
+
         keywordRepository.deleteById(id);
     }
 
     @Transactional
-    public void deleteAll(Long memberId, String location) {
+    public void deleteAll(KeywordLocationDeleteRequest request, Long memberId) {
+        Location location = request.toLocation();
         memberService.findByIdOrElseThrow(memberId);
         boolean existKeyword = keywordRepository.existsByMemberIdAndLocation(memberId, location);
         if (!existKeyword) {
             throw new GlobalException(KeywordExceptionType.KEYWORD_NOT_FOUND);
         }
+
         keywordRepository.deleteAllByMemberIdAndLocation(memberId, location);
     }
 
     public List<KeywordListResponse> getKeywords(Long memberId) {
         memberService.findByIdOrElseThrow(memberId);
+
         return keywordRepository.getKeywords(memberId);
     }
 
-    public KeywordLocationListResponse getLocations(Long memberId, String location) {
+    public KeywordLocationListResponse getLocations(KeywordLocationListRequest request,
+        Long memberId) {
         memberService.findByIdOrElseThrow(memberId);
-        List<Keyword> keywords = findAllByMemberIdAndLocation(memberId, location);
 
+        List<Keyword> keywords = keywordRepository.findAllByMemberIdAndLocation(
+            memberId, request.toLocation());
+
+//        TODO : DTO로 해당 로직 옮기기
         if (keywords.isEmpty()) {
             return new KeywordLocationListResponse();
         }
         return new KeywordLocationListResponse(keywords);
-    }
-
-    private List<Keyword> findAllByMemberIdAndLocation(Long memberId, String location) {
-        return keywordRepository.findAllByMemberIdAndLocation(
-            memberId, location);
     }
 
     private Keyword findWithMemberByIdOrElseThrow(Long id) {

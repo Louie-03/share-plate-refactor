@@ -18,8 +18,10 @@ public class FileUploader {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+
     @Value("${file.upload.location.member}")
     private String fileUploadLocationMember;
+
     @Value("${file.upload.location.share}")
     private String fileUploadLocationShare;
 

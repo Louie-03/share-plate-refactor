@@ -35,7 +35,7 @@ public class EntryService {
         Share share = shareService.findByIdOrElseThrow(shareId);
 
         share.isCanceledThrowException();
-        if (share.isEnd()) {
+        if (share.isClosed()) {
             throw new GlobalException(EntryExceptionType.CLOSED_DATE_TIME_HAS_PASSED_NOT_JOIN);
         }
         if (isExistEntry(shareId, memberId)) {
@@ -61,7 +61,7 @@ public class EntryService {
         if (!isExistEntry(shareId, memberId)) {
             throw new GlobalException(EntryExceptionType.SHARE_NOT_JOINED);
         }
-        if (share.isEnd()) {
+        if (share.isClosed()) {
             throw new GlobalException(EntryExceptionType.CLOSED_DATE_TIME_HAS_PASSED_NOT_CANCEL);
         }
         if (share.isLeftLessThanAnHour()) {
