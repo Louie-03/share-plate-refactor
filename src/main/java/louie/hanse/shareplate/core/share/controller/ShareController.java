@@ -42,7 +42,8 @@ public class ShareController {
     private final NotificationService notificationService;
 
     @PostMapping
-    public Map<String, Long> register(@Valid ShareRegisterRequest shareRegisterRequest, HttpServletRequest request)
+    public Map<String, Long> register(@Valid ShareRegisterRequest shareRegisterRequest,
+        HttpServletRequest request)
         throws IOException {
         Long memberId = (Long) request.getAttribute("memberId");
         Map<String, Long> map = shareService.register(shareRegisterRequest, memberId);
@@ -72,8 +73,9 @@ public class ShareController {
     }
 
     @PutMapping("/{id}")
-    public void edit(@PathVariable(required = false) @NotNull(message = "PathVariable의 shareId가 비어있습니다.")
-    @Positive(message = "쉐어 id는 양수여야 합니다.") Long id, @Valid ShareEditRequest shareEditRequest,
+    public void edit(
+        @PathVariable(required = false) @NotNull(message = "PathVariable의 shareId가 비어있습니다.")
+        @Positive(message = "쉐어 id는 양수여야 합니다.") Long id, @Valid ShareEditRequest shareEditRequest,
         HttpServletRequest request) throws IOException {
         Long memberId = (Long) request.getAttribute("memberId");
         shareService.edit(shareEditRequest, id, memberId);
@@ -84,7 +86,8 @@ public class ShareController {
         HttpServletRequest request) {
         Long memberId = (Long) request.getAttribute("memberId");
         shareService.cancel(id, memberId);
-        notificationService.saveActivityNotificationAndSend(id, memberId, ActivityType.SHARE_CANCEL);
+        notificationService.saveActivityNotificationAndSend(id, memberId,
+            ActivityType.SHARE_CANCEL);
     }
 
     @GetMapping("/recommendation")

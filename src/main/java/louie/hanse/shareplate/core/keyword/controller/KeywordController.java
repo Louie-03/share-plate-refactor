@@ -44,23 +44,21 @@ public class KeywordController {
 
     @PostMapping
     public KeywordRegisterResponse register(
-        @RequestBody KeywordRegisterRequest keywordRegisterRequest,
-        HttpServletRequest request) {
+        @RequestBody KeywordRegisterRequest keywordRegisterRequest, HttpServletRequest request) {
         Long memberId = (Long) request.getAttribute("memberId");
         return keywordService.register(keywordRegisterRequest, memberId);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(
-        @PathVariable(required = false) @NotNull(message = "PathVariable의 keywordId가 비어있습니다.") @Positive(message = "키워드 id는 양수여야 합니다.") Long id,
-        HttpServletRequest request) {
+    public void delete(@PathVariable(required = false)
+    @NotNull(message = "PathVariable의 keywordId가 비어있습니다.")
+    @Positive(message = "키워드 id는 양수여야 합니다.") Long id, HttpServletRequest request) {
         Long memberId = (Long) request.getAttribute("memberId");
         keywordService.delete(id, memberId);
     }
 
     @DeleteMapping
-    public void deleteAll(
-        @RequestBody KeywordLocationDeleteRequest keywordLocationDeleteRequest,
+    public void deleteAll(@RequestBody KeywordLocationDeleteRequest keywordLocationDeleteRequest,
         HttpServletRequest request) {
         Long memberId = (Long) request.getAttribute("memberId");
         keywordService.deleteAll(keywordLocationDeleteRequest, memberId);

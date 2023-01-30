@@ -33,7 +33,8 @@ public class WishController {
 
     @DeleteMapping
     public void cancelWish(
-        @RequestBody Map<String, @Valid @NotNull(message = "요청한 위시정보 필드값이 비어있습니다.") @Positive(message = "쉐어 id는 양수여야 합니다.") Long> map,
+        @RequestBody Map<String, @Valid @NotNull(message = "요청한 위시정보 필드값이 비어있습니다.")
+        @Positive(message = "쉐어 id는 양수여야 합니다.") Long> map,
         HttpServletRequest request) {
         Long shareId = map.get("shareId");
         Long memberId = (Long) request.getAttribute("memberId");

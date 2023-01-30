@@ -32,8 +32,8 @@ public class ChatRoomMemberController {
 
     @DeleteMapping
     public void exitChatRoom(
-        @RequestBody Map<String, @Valid @NotNull(message = "요청한 채팅방정보 필드값이 비어있습니다.") @Positive(message = "채팅방 id는 양수여야 합니다.") Long> map,
-        HttpServletRequest request) {
+        @RequestBody Map<String, @Valid @NotNull(message = "요청한 채팅방정보 필드값이 비어있습니다.")
+        @Positive(message = "채팅방 id는 양수여야 합니다.") Long> map, HttpServletRequest request) {
         Long chatRoomId = map.get("chatRoomId");
         Long memberId = (Long) request.getAttribute("memberId");
         chatRoomMemberService.exitChatRoom(chatRoomId, memberId);
