@@ -145,7 +145,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
 
     @Test
     void 이미지의_개수가_5개가_넘는다면_예외를_발생시킨다() {
-        String accessToken = jwtProvider.createAccessToken(2355841033L);
+        String accessToken = jwtProvider.createAccessToken(2398606895L);
 
         given(documentationSpec)
             .filter(document("share-edit-put-failed-by-image-limit-exceeded"))
@@ -185,7 +185,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
 
     @Test
     void 대한민국의_위도_범위를_벗어난_경우_예외를_발생시킨다() {
-        String accessToken = jwtProvider.createAccessToken(2355841033L);
+        String accessToken = jwtProvider.createAccessToken(2398606895L);
 
         given(documentationSpec)
             .filter(document("share-edit-put-failed-by-out-of-scope-for-korea"))
@@ -222,7 +222,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
 
     @Test
     void 대한민국의_경도_범위를_벗어난_경우_예외를_발생시킨다() {
-        String accessToken = jwtProvider.createAccessToken(2355841033L);
+        String accessToken = jwtProvider.createAccessToken(2398606895L);
 
         given(documentationSpec)
             .filter(document("share-edit-put-failed-by-out-of-scope-for-korea"))
@@ -259,7 +259,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
 
     @Test
     void 마감_시간이_과거인_경우_예외를_발생시킨다() {
-        String accessToken = jwtProvider.createAccessToken(2355841033L);
+        String accessToken = jwtProvider.createAccessToken(2398606895L);
 
         given(documentationSpec)
             .filter(document("share-edit-put-failed-by-past-closed-date-time"))
