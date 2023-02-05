@@ -9,12 +9,15 @@ import louie.hanse.shareplate.core.chatroom.domain.ChatRoomMember;
 import louie.hanse.shareplate.core.entry.domain.Entry;
 import louie.hanse.shareplate.core.member.domain.Member;
 import louie.hanse.shareplate.core.member.service.MemberService;
+import louie.hanse.shareplate.core.notification.domain.ActivityType;
+import louie.hanse.shareplate.core.notification.event.ActivityNotificationRegisterEvent;
 import louie.hanse.shareplate.core.share.domain.Share;
 import louie.hanse.shareplate.common.exception.GlobalException;
 import louie.hanse.shareplate.common.exception.type.EntryExceptionType;
 import louie.hanse.shareplate.core.chatroom.repository.ChatRoomMemberRepository;
 import louie.hanse.shareplate.core.entry.repository.EntryRepository;
 import louie.hanse.shareplate.core.share.service.ShareService;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +31,7 @@ public class EntryService {
     private final ShareService shareService;
     private final EntryRepository entryRepository;
     private final ChatRoomMemberRepository chatRoomMemberRepository;
+    private final ApplicationEventPublisher publisher;
 
     @Transactional
     public Long entry(Long shareId, Long memberId) {
@@ -48,6 +52,9 @@ public class EntryService {
         ChatRoom chatRoom = share.getEntryChatRoom();
         ChatRoomMember chatRoomMember = new ChatRoomMember(member, chatRoom);
         chatRoomMemberRepository.save(chatRoomMember);
+
+        publisher.publishEvent(
+            new ActivityNotificationRegisterEvent(shareId, memberId, ActivityType.ENTRY));
 
         return entry.getId();
     }
