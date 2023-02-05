@@ -9,30 +9,32 @@ import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import louie.hanse.shareplate.core.chatroom.domain.ChatRoom;
-import louie.hanse.shareplate.core.entry.domain.Entry;
-import louie.hanse.shareplate.core.member.domain.Member;
-import louie.hanse.shareplate.core.member.service.MemberService;
-import louie.hanse.shareplate.core.share.domain.Share;
 import louie.hanse.shareplate.common.exception.GlobalException;
 import louie.hanse.shareplate.common.exception.type.ShareExceptionType;
 import louie.hanse.shareplate.common.jwt.JwtProvider;
-import louie.hanse.shareplate.core.entry.repository.EntryRepository;
-import louie.hanse.shareplate.core.share.repository.ShareRepository;
-import louie.hanse.shareplate.core.wish.repository.WishRepository;
-import louie.hanse.shareplate.core.chatroom.domain.ChatRoomType;
-import louie.hanse.shareplate.core.share.domain.MineType;
-import louie.hanse.shareplate.core.share.domain.ShareType;
 import louie.hanse.shareplate.common.uploader.FileUploader;
-import louie.hanse.shareplate.core.share.dto.response.ShareDetailResponse;
+import louie.hanse.shareplate.core.chatroom.domain.ChatRoom;
+import louie.hanse.shareplate.core.chatroom.domain.ChatRoomType;
+import louie.hanse.shareplate.core.entry.domain.Entry;
+import louie.hanse.shareplate.core.entry.repository.EntryRepository;
+import louie.hanse.shareplate.core.member.domain.Member;
+import louie.hanse.shareplate.core.member.service.MemberService;
+import louie.hanse.shareplate.core.notification.event.NotificationRegisterEvent;
+import louie.hanse.shareplate.core.share.domain.MineType;
+import louie.hanse.shareplate.core.share.domain.Share;
+import louie.hanse.shareplate.core.share.domain.ShareType;
 import louie.hanse.shareplate.core.share.dto.request.ShareEditRequest;
 import louie.hanse.shareplate.core.share.dto.request.ShareMineSearchRequest;
 import louie.hanse.shareplate.core.share.dto.request.ShareRecommendationRequest;
-import louie.hanse.shareplate.core.share.dto.response.ShareRecommendationResponse;
 import louie.hanse.shareplate.core.share.dto.request.ShareRegisterRequest;
 import louie.hanse.shareplate.core.share.dto.request.ShareSearchRequest;
+import louie.hanse.shareplate.core.share.dto.response.ShareDetailResponse;
+import louie.hanse.shareplate.core.share.dto.response.ShareRecommendationResponse;
 import louie.hanse.shareplate.core.share.dto.response.ShareSearchResponse;
 import louie.hanse.shareplate.core.share.dto.response.ShareWriterResponse;
+import louie.hanse.shareplate.core.share.repository.ShareRepository;
+import louie.hanse.shareplate.core.wish.repository.WishRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -50,6 +52,7 @@ public class ShareService {
     private final EntryRepository entryRepository;
     private final JwtProvider jwtProvider;
     private final FileUploader fileUploader;
+    private final ApplicationEventPublisher publisher;
 
     @Transactional
     public Map<String, Long> register(ShareRegisterRequest request, Long memberId) throws IOException {
@@ -70,6 +73,8 @@ public class ShareService {
         entryRepository.save(entry);
         new ChatRoom(member, share, ChatRoomType.ENTRY);
         shareRepository.save(share);
+
+        publisher.publishEvent(new NotificationRegisterEvent(share.getId(), memberId));
 
         return Map.of("id", share.getId(), "entryId", entry.getId());
     }

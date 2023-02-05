@@ -47,7 +47,6 @@ public class ShareController {
         throws IOException {
         Long memberId = (Long) request.getAttribute("memberId");
         Map<String, Long> map = shareService.register(shareRegisterRequest, memberId);
-        notificationService.saveKeywordNotificationAndSend(map.get("id"), memberId);
         return Collections.singletonMap("entryId", map.get("entryId"));
     }
 
