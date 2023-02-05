@@ -19,6 +19,8 @@ import louie.hanse.shareplate.core.entry.domain.Entry;
 import louie.hanse.shareplate.core.entry.repository.EntryRepository;
 import louie.hanse.shareplate.core.member.domain.Member;
 import louie.hanse.shareplate.core.member.service.MemberService;
+import louie.hanse.shareplate.core.notification.domain.ActivityType;
+import louie.hanse.shareplate.core.notification.event.ActivityNotificationRegisterEvent;
 import louie.hanse.shareplate.core.notification.event.NotificationRegisterEvent;
 import louie.hanse.shareplate.core.share.domain.MineType;
 import louie.hanse.shareplate.core.share.domain.Share;
@@ -55,7 +57,8 @@ public class ShareService {
     private final ApplicationEventPublisher publisher;
 
     @Transactional
-    public Map<String, Long> register(ShareRegisterRequest request, Long memberId) throws IOException {
+    public Map<String, Long> register(ShareRegisterRequest request, Long memberId)
+        throws IOException {
         Member member = memberService.findByIdOrElseThrow(memberId);
         Share share = request.toEntity(member);
         for (MultipartFile image : request.getImages()) {
@@ -94,7 +97,8 @@ public class ShareService {
         LocalDateTime currentDateTime = LocalDateTime.now();
 
         Map<MineType, Supplier<List<Share>>> shareFindMapByMineType = Map.of(
-            MineType.ENTRY, () -> shareRepository.findWithEntryByMemberIdAndTypeAndNotWriteByMeAndIsExpired(
+            MineType.ENTRY, () ->
+                shareRepository.findWithEntryByMemberIdAndTypeAndNotWriteByMeAndIsExpired(
                 memberId, type, expired, currentDateTime),
             MineType.WRITER, () -> shareRepository.findByWriterIdAndTypeAndIsExpired(
                 memberId, type, expired, currentDateTime),
@@ -171,9 +175,13 @@ public class ShareService {
         Share share = findWithWriterByIdOrElseThrow(id);
         share.isNotWriterThrowException(member);
         if (share.isLeftLessThanAnHour()) {
-            throw new GlobalException(ShareExceptionType.CLOSE_TO_THE_CLOSED_DATE_TIME_CANNOT_CANCEL);
+            throw new GlobalException(
+                ShareExceptionType.CLOSE_TO_THE_CLOSED_DATE_TIME_CANNOT_CANCEL);
         }
         share.cancel();
+
+        publisher.publishEvent(
+            new ActivityNotificationRegisterEvent(id, memberId, ActivityType.SHARE_CANCEL));
     }
 
     public Share findByIdOrElseThrow(Long id) {
@@ -181,7 +189,8 @@ public class ShareService {
             .orElseThrow(() -> new GlobalException(ShareExceptionType.SHARE_NOT_FOUND));
     }
 
-    public List<ShareRecommendationResponse> recommendationAroundMember(ShareRecommendationRequest request) {
+    public List<ShareRecommendationResponse> recommendationAroundMember(
+        ShareRecommendationRequest request) {
         List<ShareRecommendationResponse> shareRecommendationResponses = shareRepository
             .recommendationAroundMember(request);
         Collections.shuffle(shareRecommendationResponses);

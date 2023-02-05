@@ -1,6 +1,7 @@
 package louie.hanse.shareplate.core.share.event.handler;
 
 import lombok.RequiredArgsConstructor;
+import louie.hanse.shareplate.core.notification.event.ActivityNotificationRegisterEvent;
 import louie.hanse.shareplate.core.notification.event.NotificationRegisterEvent;
 import louie.hanse.shareplate.core.notification.service.NotificationService;
 import org.springframework.context.event.EventListener;
@@ -15,5 +16,11 @@ public class ShareRegisterEventHandler {
     @EventListener
     public void registerKeywordNotification(NotificationRegisterEvent event) {
         notificationService.saveKeywordNotificationAndSend(event.getShareId(), event.getMemberId());
+    }
+
+    @EventListener
+    public void registerActivityNotification(ActivityNotificationRegisterEvent event) {
+        notificationService.saveActivityNotificationAndSend(event.getShareId(), event.getMemberId(),
+            event.getActivityType());
     }
 }
