@@ -80,6 +80,9 @@ public class EntryService {
         entryRepository.deleteByMemberIdAndShareId(memberId, shareId);
         chatRoomMemberRepository.deleteByMemberIdAndChatRoomId(
             memberId, share.getEntryChatRoom().getId());
+
+        publisher.publishEvent(
+            new ActivityNotificationRegisterEvent(shareId, memberId, ActivityType.ENTRY_CANCEL));
     }
 
     public List<Long> getIdList(Long memberId) {
