@@ -54,7 +54,7 @@ public class ShareService {
     private final EntryRepository entryRepository;
     private final JwtProvider jwtProvider;
     private final FileUploader fileUploader;
-    private final ApplicationEventPublisher publisher;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public Map<String, Long> register(ShareRegisterRequest request, Long memberId)
@@ -77,7 +77,7 @@ public class ShareService {
         new ChatRoom(member, share, ChatRoomType.ENTRY);
         shareRepository.save(share);
 
-        publisher.publishEvent(new NotificationRegisterEvent(share.getId(), memberId));
+        eventPublisher.publishEvent(new NotificationRegisterEvent(share.getId(), memberId));
 
         return Map.of("id", share.getId(), "entryId", entry.getId());
     }
@@ -180,7 +180,7 @@ public class ShareService {
         }
         share.cancel();
 
-        publisher.publishEvent(
+        eventPublisher.publishEvent(
             new ActivityNotificationRegisterEvent(id, memberId, ActivityType.SHARE_CANCEL));
     }
 

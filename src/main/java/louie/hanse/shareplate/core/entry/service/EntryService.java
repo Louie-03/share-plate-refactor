@@ -31,7 +31,7 @@ public class EntryService {
     private final ShareService shareService;
     private final EntryRepository entryRepository;
     private final ChatRoomMemberRepository chatRoomMemberRepository;
-    private final ApplicationEventPublisher publisher;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public Long entry(Long shareId, Long memberId) {
@@ -53,7 +53,7 @@ public class EntryService {
         ChatRoomMember chatRoomMember = new ChatRoomMember(member, chatRoom);
         chatRoomMemberRepository.save(chatRoomMember);
 
-        publisher.publishEvent(
+        eventPublisher.publishEvent(
             new ActivityNotificationRegisterEvent(shareId, memberId, ActivityType.ENTRY));
 
         return entry.getId();
@@ -81,7 +81,7 @@ public class EntryService {
         chatRoomMemberRepository.deleteByMemberIdAndChatRoomId(
             memberId, share.getEntryChatRoom().getId());
 
-        publisher.publishEvent(
+        eventPublisher.publishEvent(
             new ActivityNotificationRegisterEvent(shareId, memberId, ActivityType.ENTRY_CANCEL));
     }
 
