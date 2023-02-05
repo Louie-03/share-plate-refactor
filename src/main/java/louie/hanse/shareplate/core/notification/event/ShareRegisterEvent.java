@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class NotificationRegisterEvent {
+public class ShareRegisterEvent {
 
     private final Long shareId;
     private final Long memberId;

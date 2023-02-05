@@ -21,7 +21,7 @@ import louie.hanse.shareplate.core.member.domain.Member;
 import louie.hanse.shareplate.core.member.service.MemberService;
 import louie.hanse.shareplate.core.notification.domain.ActivityType;
 import louie.hanse.shareplate.core.notification.event.ActivityNotificationRegisterEvent;
-import louie.hanse.shareplate.core.notification.event.NotificationRegisterEvent;
+import louie.hanse.shareplate.core.notification.event.ShareRegisterEvent;
 import louie.hanse.shareplate.core.share.domain.MineType;
 import louie.hanse.shareplate.core.share.domain.Share;
 import louie.hanse.shareplate.core.share.domain.ShareType;
@@ -77,7 +77,7 @@ public class ShareService {
         new ChatRoom(member, share, ChatRoomType.ENTRY);
         shareRepository.save(share);
 
-        eventPublisher.publishEvent(new NotificationRegisterEvent(share.getId(), memberId));
+        eventPublisher.publishEvent(new ShareRegisterEvent(share.getId(), memberId));
 
         return Map.of("id", share.getId(), "entryId", entry.getId());
     }
