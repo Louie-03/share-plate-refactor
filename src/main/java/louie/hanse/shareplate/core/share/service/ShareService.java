@@ -19,9 +19,6 @@ import louie.hanse.shareplate.core.entry.domain.Entry;
 import louie.hanse.shareplate.core.entry.repository.EntryRepository;
 import louie.hanse.shareplate.core.member.domain.Member;
 import louie.hanse.shareplate.core.member.service.MemberService;
-import louie.hanse.shareplate.core.notification.domain.ActivityType;
-import louie.hanse.shareplate.core.notification.event.ActivityNotificationRegisterEvent;
-import louie.hanse.shareplate.core.notification.event.ShareRegisterEvent;
 import louie.hanse.shareplate.core.share.domain.MineType;
 import louie.hanse.shareplate.core.share.domain.Share;
 import louie.hanse.shareplate.core.share.domain.ShareType;
@@ -34,6 +31,8 @@ import louie.hanse.shareplate.core.share.dto.response.ShareDetailResponse;
 import louie.hanse.shareplate.core.share.dto.response.ShareRecommendationResponse;
 import louie.hanse.shareplate.core.share.dto.response.ShareSearchResponse;
 import louie.hanse.shareplate.core.share.dto.response.ShareWriterResponse;
+import louie.hanse.shareplate.core.share.event.ShareCancelEvent;
+import louie.hanse.shareplate.core.share.event.ShareRegisterEvent;
 import louie.hanse.shareplate.core.share.repository.ShareRepository;
 import louie.hanse.shareplate.core.wish.repository.WishRepository;
 import org.springframework.context.ApplicationEventPublisher;
@@ -178,10 +177,10 @@ public class ShareService {
             throw new GlobalException(
                 ShareExceptionType.CLOSE_TO_THE_CLOSED_DATE_TIME_CANNOT_CANCEL);
         }
+
         share.cancel();
 
-        eventPublisher.publishEvent(
-            new ActivityNotificationRegisterEvent(id, memberId, ActivityType.SHARE_CANCEL));
+        eventPublisher.publishEvent(new ShareCancelEvent(id, memberId));
     }
 
     public Share findByIdOrElseThrow(Long id) {

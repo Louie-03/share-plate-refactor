@@ -1,4 +1,4 @@
-package louie.hanse.shareplate.core.notification.event;
+package louie.hanse.shareplate.core.share.event;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
