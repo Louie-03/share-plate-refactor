@@ -13,7 +13,7 @@ public class KeywordNotificationEventListener {
     private final NotificationService notificationService;
 
     @EventListener
-    public void registerKeywordNotification(ShareRegisterEvent event) {
+    public void registerKeyword(ShareRegisterEvent event) {
         notificationService.saveKeywordNotificationAndSend(event.getShareId(), event.getMemberId());
     }
 

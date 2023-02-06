@@ -16,19 +16,19 @@ public class ActivityNotificationEventListener {
     private final NotificationService notificationService;
 
     @EventListener
-    public void registerEntryActivityNotification(EntryEvent event) {
+    public void registerEntry(EntryEvent event) {
         notificationService.saveActivityNotificationAndSend(
             event.getShareId(), event.getMemberId(), ActivityType.ENTRY);
     }
 
     @EventListener
-    public void registerEntryCancelActivityNotification(EntryCancelEvent event) {
+    public void registerEntryCancel(EntryCancelEvent event) {
         notificationService.saveActivityNotificationAndSend(
             event.getShareId(), event.getMemberId(), ActivityType.ENTRY_CANCEL);
     }
 
     @EventListener
-    public void registerShareCancelActivityNotification(ShareCancelEvent event) {
+    public void registerShareCancel(ShareCancelEvent event) {
         notificationService.saveActivityNotificationAndSend(
             event.getShareId(), event.getMemberId(), ActivityType.SHARE_CANCEL);
     }
