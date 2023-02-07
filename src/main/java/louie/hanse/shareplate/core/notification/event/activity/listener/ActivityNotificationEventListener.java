@@ -6,8 +6,9 @@ import louie.hanse.shareplate.core.entry.event.EntryEvent;
 import louie.hanse.shareplate.core.notification.domain.ActivityType;
 import louie.hanse.shareplate.core.notification.service.NotificationService;
 import louie.hanse.shareplate.core.share.event.ShareCancelEvent;
-import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @RequiredArgsConstructor
@@ -15,19 +16,22 @@ public class ActivityNotificationEventListener {
 
     private final NotificationService notificationService;
 
-    @EventListener
+    @Async
+    @TransactionalEventListener
     public void registerEntry(EntryEvent event) {
         notificationService.saveActivityNotificationAndSend(
             event.getShareId(), event.getMemberId(), ActivityType.ENTRY);
     }
 
-    @EventListener
+    @Async
+    @TransactionalEventListener
     public void registerEntryCancel(EntryCancelEvent event) {
         notificationService.saveActivityNotificationAndSend(
             event.getShareId(), event.getMemberId(), ActivityType.ENTRY_CANCEL);
     }
 
-    @EventListener
+    @Async
+    @TransactionalEventListener
     public void registerShareCancel(ShareCancelEvent event) {
         notificationService.saveActivityNotificationAndSend(
             event.getShareId(), event.getMemberId(), ActivityType.SHARE_CANCEL);
