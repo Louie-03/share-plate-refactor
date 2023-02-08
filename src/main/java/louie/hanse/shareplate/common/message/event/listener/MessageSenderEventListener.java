@@ -2,6 +2,7 @@ package louie.hanse.shareplate.common.message.event.listener;
 
 import lombok.RequiredArgsConstructor;
 import louie.hanse.shareplate.common.message.sender.MessageSender;
+import louie.hanse.shareplate.core.chat.event.ChatSaveEvent;
 import louie.hanse.shareplate.core.notification.event.activity.ActivityNotificationsSaveEvent;
 import louie.hanse.shareplate.core.notification.event.keyword.KeywordNotificationsSaveEvent;
 import org.springframework.scheduling.annotation.Async;
@@ -26,6 +27,12 @@ public class MessageSenderEventListener {
     public void sendKeywordNotifications(KeywordNotificationsSaveEvent event) {
         messageSender.sendKeywordNotifications(event.getKeywordNotificationIds(),
             event.getKeywordIds());
+    }
+
+    @Async
+    @TransactionalEventListener
+    public void sendChatDetail(ChatSaveEvent event) {
+        messageSender.sendChatDetail(event.getChatId());
     }
 
 }
