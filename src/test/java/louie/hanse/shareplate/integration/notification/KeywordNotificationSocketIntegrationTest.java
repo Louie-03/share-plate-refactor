@@ -18,7 +18,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-@DisplayName("웹소켓 키워드 알림 통합 테스트")
+@DisplayName("키워드 알림 통합 테스트")
 class KeywordNotificationSocketIntegrationTest extends InitSocketIntegrationTest {
 
 //    TODO : shareId 검증하도록 구현

@@ -9,30 +9,33 @@ import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import louie.hanse.shareplate.core.chatroom.domain.ChatRoom;
-import louie.hanse.shareplate.core.entry.domain.Entry;
-import louie.hanse.shareplate.core.member.domain.Member;
-import louie.hanse.shareplate.core.member.service.MemberService;
-import louie.hanse.shareplate.core.share.domain.Share;
 import louie.hanse.shareplate.common.exception.GlobalException;
 import louie.hanse.shareplate.common.exception.type.ShareExceptionType;
 import louie.hanse.shareplate.common.jwt.JwtProvider;
-import louie.hanse.shareplate.core.entry.repository.EntryRepository;
-import louie.hanse.shareplate.core.share.repository.ShareRepository;
-import louie.hanse.shareplate.core.wish.repository.WishRepository;
-import louie.hanse.shareplate.core.chatroom.domain.ChatRoomType;
-import louie.hanse.shareplate.core.share.domain.MineType;
-import louie.hanse.shareplate.core.share.domain.ShareType;
 import louie.hanse.shareplate.common.uploader.FileUploader;
-import louie.hanse.shareplate.core.share.dto.response.ShareDetailResponse;
+import louie.hanse.shareplate.core.chatroom.domain.ChatRoom;
+import louie.hanse.shareplate.core.chatroom.domain.ChatRoomType;
+import louie.hanse.shareplate.core.entry.domain.Entry;
+import louie.hanse.shareplate.core.entry.repository.EntryRepository;
+import louie.hanse.shareplate.core.member.domain.Member;
+import louie.hanse.shareplate.core.member.service.MemberService;
+import louie.hanse.shareplate.core.share.domain.MineType;
+import louie.hanse.shareplate.core.share.domain.Share;
+import louie.hanse.shareplate.core.share.domain.ShareType;
 import louie.hanse.shareplate.core.share.dto.request.ShareEditRequest;
 import louie.hanse.shareplate.core.share.dto.request.ShareMineSearchRequest;
 import louie.hanse.shareplate.core.share.dto.request.ShareRecommendationRequest;
-import louie.hanse.shareplate.core.share.dto.response.ShareRecommendationResponse;
 import louie.hanse.shareplate.core.share.dto.request.ShareRegisterRequest;
 import louie.hanse.shareplate.core.share.dto.request.ShareSearchRequest;
+import louie.hanse.shareplate.core.share.dto.response.ShareDetailResponse;
+import louie.hanse.shareplate.core.share.dto.response.ShareRecommendationResponse;
 import louie.hanse.shareplate.core.share.dto.response.ShareSearchResponse;
 import louie.hanse.shareplate.core.share.dto.response.ShareWriterResponse;
+import louie.hanse.shareplate.core.share.event.ShareCancelEvent;
+import louie.hanse.shareplate.core.share.event.ShareRegisterEvent;
+import louie.hanse.shareplate.core.share.repository.ShareRepository;
+import louie.hanse.shareplate.core.wish.repository.WishRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -50,9 +53,11 @@ public class ShareService {
     private final EntryRepository entryRepository;
     private final JwtProvider jwtProvider;
     private final FileUploader fileUploader;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
-    public Map<String, Long> register(ShareRegisterRequest request, Long memberId) throws IOException {
+    public Map<String, Long> register(ShareRegisterRequest request, Long memberId)
+        throws IOException {
         Member member = memberService.findByIdOrElseThrow(memberId);
         Share share = request.toEntity(member);
         for (MultipartFile image : request.getImages()) {
@@ -70,6 +75,8 @@ public class ShareService {
         entryRepository.save(entry);
         new ChatRoom(member, share, ChatRoomType.ENTRY);
         shareRepository.save(share);
+
+        eventPublisher.publishEvent(new ShareRegisterEvent(share.getId(), memberId));
 
         return Map.of("id", share.getId(), "entryId", entry.getId());
     }
@@ -89,7 +96,8 @@ public class ShareService {
         LocalDateTime currentDateTime = LocalDateTime.now();
 
         Map<MineType, Supplier<List<Share>>> shareFindMapByMineType = Map.of(
-            MineType.ENTRY, () -> shareRepository.findWithEntryByMemberIdAndTypeAndNotWriteByMeAndIsExpired(
+            MineType.ENTRY, () ->
+                shareRepository.findWithEntryByMemberIdAndTypeAndNotWriteByMeAndIsExpired(
                 memberId, type, expired, currentDateTime),
             MineType.WRITER, () -> shareRepository.findByWriterIdAndTypeAndIsExpired(
                 memberId, type, expired, currentDateTime),
@@ -166,9 +174,13 @@ public class ShareService {
         Share share = findWithWriterByIdOrElseThrow(id);
         share.isNotWriterThrowException(member);
         if (share.isLeftLessThanAnHour()) {
-            throw new GlobalException(ShareExceptionType.CLOSE_TO_THE_CLOSED_DATE_TIME_CANNOT_CANCEL);
+            throw new GlobalException(
+                ShareExceptionType.CLOSE_TO_THE_CLOSED_DATE_TIME_CANNOT_CANCEL);
         }
+
         share.cancel();
+
+        eventPublisher.publishEvent(new ShareCancelEvent(id, memberId));
     }
 
     public Share findByIdOrElseThrow(Long id) {
@@ -176,7 +188,8 @@ public class ShareService {
             .orElseThrow(() -> new GlobalException(ShareExceptionType.SHARE_NOT_FOUND));
     }
 
-    public List<ShareRecommendationResponse> recommendationAroundMember(ShareRecommendationRequest request) {
+    public List<ShareRecommendationResponse> recommendationAroundMember(
+        ShareRecommendationRequest request) {
         List<ShareRecommendationResponse> shareRecommendationResponses = shareRepository
             .recommendationAroundMember(request);
         Collections.shuffle(shareRecommendationResponses);

@@ -19,7 +19,7 @@ public class ChatSocketController {
         StompHeaderAccessor stompHeaderAccessor) {
         Long memberId = (Long) stompHeaderAccessor.getSessionAttributes().get("memberId");
         String contents = map.get("contents");
-        chatService.saveAndResponseChatMessage(chatRoomId, memberId, contents);
+        chatService.save(chatRoomId, memberId, contents);
     }
 
 }

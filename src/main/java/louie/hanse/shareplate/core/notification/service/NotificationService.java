@@ -6,24 +6,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import louie.hanse.shareplate.core.notification.domain.ActivityType;
-import louie.hanse.shareplate.core.notification.domain.ActivityNotification;
-import louie.hanse.shareplate.core.entry.domain.Entry;
-import louie.hanse.shareplate.core.keyword.domain.Keyword;
-import louie.hanse.shareplate.core.member.domain.Member;
-import louie.hanse.shareplate.core.notification.domain.Notification;
-import louie.hanse.shareplate.core.member.service.MemberService;
-import louie.hanse.shareplate.core.share.service.ShareService;
-import louie.hanse.shareplate.core.share.domain.Share;
 import louie.hanse.shareplate.common.exception.GlobalException;
 import louie.hanse.shareplate.common.exception.type.NotificationExceptionType;
+import louie.hanse.shareplate.core.entry.domain.Entry;
 import louie.hanse.shareplate.core.entry.repository.EntryRepository;
+import louie.hanse.shareplate.core.keyword.domain.Keyword;
 import louie.hanse.shareplate.core.keyword.repository.KeywordRepository;
-import louie.hanse.shareplate.core.notification.repository.NotificationRepository;
+import louie.hanse.shareplate.core.member.domain.Member;
+import louie.hanse.shareplate.core.member.service.MemberService;
+import louie.hanse.shareplate.core.notification.domain.ActivityNotification;
+import louie.hanse.shareplate.core.notification.domain.ActivityType;
+import louie.hanse.shareplate.core.notification.domain.Notification;
 import louie.hanse.shareplate.core.notification.domain.NotificationType;
 import louie.hanse.shareplate.core.notification.dto.response.ActivityNotificationResponse;
 import louie.hanse.shareplate.core.notification.dto.response.KeywordNotificationResponse;
-import org.springframework.messaging.core.MessageSendingOperations;
+import louie.hanse.shareplate.core.notification.event.activity.ActivityNotificationsSaveEvent;
+import louie.hanse.shareplate.core.notification.event.keyword.KeywordNotificationsSaveEvent;
+import louie.hanse.shareplate.core.notification.repository.NotificationRepository;
+import louie.hanse.shareplate.core.share.domain.Share;
+import louie.hanse.shareplate.core.share.service.ShareService;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +43,7 @@ public class NotificationService {
     private final ShareService shareService;
     private final MemberService memberService;
     private final TaskScheduler taskScheduler;
-    private final MessageSendingOperations messageSendingOperations;
+    private final ApplicationEventPublisher eventPublisher;
 
     public List<ActivityNotificationResponse> getActivityNotificationList(Long memberId) {
         memberService.findByIdOrElseThrow(memberId);
@@ -82,7 +84,7 @@ public class NotificationService {
     }
 
     @Transactional
-    public void saveKeywordNotificationAndSend(Long shareId, Long memberId) {
+    public void saveKeywordNotification(Long shareId, Long memberId) {
         Share share = shareService.findByIdOrElseThrow(shareId);
         List<Keyword> keywords = keywordRepository.findAllByContainsContentsAndNotMemberIdAndAroundShare(
             memberId, share.getTitle(), share.getLongitude(), share.getLatitude());
@@ -101,8 +103,9 @@ public class NotificationService {
     }
 
     @Transactional
-    public void saveActivityNotificationAndSend(Long shareId, Long memberId,
+    public void saveActivityNotification(Long shareId, Long memberId,
         ActivityType activityType) {
+
         Share share = shareService.findByIdOrElseThrow(shareId);
         Member member = memberService.findByIdOrElseThrow(memberId);
         List<Entry> entries = entryRepository.findAllByShareIdAndNotMemberId(shareId,
@@ -116,11 +119,25 @@ public class NotificationService {
         }
         notificationRepository.saveAll(activityNotifications);
 
-        for (int i = 0; i < entries.size(); i++) {
-            messageSendingOperations.convertAndSend(
-                "/queue/notifications/entries/" + entries.get(i).getId(),
-                new ActivityNotificationResponse(activityNotifications.get(i)));
-        }
+        List<Long> notificationIds = activityNotifications.stream()
+            .map(Notification::getId)
+            .collect(Collectors.toList());
+
+        List<Long> entryIds = entries.stream()
+            .map(Entry::getId)
+            .collect(Collectors.toList());
+
+        eventPublisher.publishEvent(new ActivityNotificationsSaveEvent(notificationIds, entryIds));
+    }
+
+    public Notification findKeywordNotificationByIdOrElseThrow(Long id) {
+        return notificationRepository.findKeywordNotificationById(id).orElseThrow(
+            () -> new GlobalException(NotificationExceptionType.NOTIFICATION_NOT_FOUND));
+    }
+
+    public ActivityNotification findActivityNotificationByIdOrElseThrow(Long id) {
+        return notificationRepository.findActivityNotificationById(id).orElseThrow(
+            () -> new GlobalException(NotificationExceptionType.NOTIFICATION_NOT_FOUND));
     }
 
     private void createDeadlineNotificationSchedule(Long shareId) {
@@ -142,22 +159,31 @@ public class NotificationService {
             }
             notificationRepository.saveAll(activityNotifications);
 
-            for (int i = 0; i < entries.size(); i++) {
-                messageSendingOperations.convertAndSend(
-                    "/queue/notifications/entries/" + entries.get(i).getId(),
-                    activityNotificationResponses.get(i));
-            }
+            List<Long> notificationIds = activityNotifications.stream()
+                .map(Notification::getId)
+                .collect(Collectors.toList());
+
+            List<Long> entryIds = entries.stream()
+                .map(Entry::getId)
+                .collect(Collectors.toList());
+
+            eventPublisher.publishEvent(new ActivityNotificationsSaveEvent(notificationIds, entryIds));
+
         }, instant);
     }
 
     private void sendKeywordNotifications(List<Keyword> keywords,
         List<Notification> notifications) {
-        for (int i = 0; i < keywords.size(); i++) {
-            Long keywordId = keywords.get(i).getId();
-            messageSendingOperations.convertAndSend(
-                "/queue/notifications/keywords/" + keywordId,
-                new KeywordNotificationResponse(notifications.get(i)));
-        }
+
+        List<Long> notificationIds = notifications.stream()
+            .map(Notification::getId)
+            .collect(Collectors.toList());
+
+        List<Long> keywordIds = keywords.stream()
+            .map(Keyword::getId)
+            .collect(Collectors.toList());
+
+        eventPublisher.publishEvent(new KeywordNotificationsSaveEvent(notificationIds, keywordIds));
     }
 
     private Notification findWithMemberByIdOrElseThrow(Long id) {

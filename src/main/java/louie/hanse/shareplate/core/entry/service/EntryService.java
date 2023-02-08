@@ -4,17 +4,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import louie.hanse.shareplate.common.exception.GlobalException;
+import louie.hanse.shareplate.common.exception.type.EntryExceptionType;
 import louie.hanse.shareplate.core.chatroom.domain.ChatRoom;
 import louie.hanse.shareplate.core.chatroom.domain.ChatRoomMember;
+import louie.hanse.shareplate.core.chatroom.repository.ChatRoomMemberRepository;
 import louie.hanse.shareplate.core.entry.domain.Entry;
+import louie.hanse.shareplate.core.entry.event.EntryCancelEvent;
+import louie.hanse.shareplate.core.entry.event.EntryEvent;
+import louie.hanse.shareplate.core.entry.repository.EntryRepository;
 import louie.hanse.shareplate.core.member.domain.Member;
 import louie.hanse.shareplate.core.member.service.MemberService;
 import louie.hanse.shareplate.core.share.domain.Share;
-import louie.hanse.shareplate.common.exception.GlobalException;
-import louie.hanse.shareplate.common.exception.type.EntryExceptionType;
-import louie.hanse.shareplate.core.chatroom.repository.ChatRoomMemberRepository;
-import louie.hanse.shareplate.core.entry.repository.EntryRepository;
 import louie.hanse.shareplate.core.share.service.ShareService;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +31,7 @@ public class EntryService {
     private final ShareService shareService;
     private final EntryRepository entryRepository;
     private final ChatRoomMemberRepository chatRoomMemberRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public Long entry(Long shareId, Long memberId) {
@@ -48,6 +52,8 @@ public class EntryService {
         ChatRoom chatRoom = share.getEntryChatRoom();
         ChatRoomMember chatRoomMember = new ChatRoomMember(member, chatRoom);
         chatRoomMemberRepository.save(chatRoomMember);
+
+        eventPublisher.publishEvent(new EntryEvent(shareId, memberId));
 
         return entry.getId();
     }
@@ -73,6 +79,8 @@ public class EntryService {
         entryRepository.deleteByMemberIdAndShareId(memberId, shareId);
         chatRoomMemberRepository.deleteByMemberIdAndChatRoomId(
             memberId, share.getEntryChatRoom().getId());
+
+        eventPublisher.publishEvent(new EntryCancelEvent(shareId, memberId));
     }
 
     public List<Long> getIdList(Long memberId) {
