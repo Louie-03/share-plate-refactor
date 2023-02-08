@@ -16,7 +16,7 @@ public class KeywordNotificationEventListener {
     @Async
     @TransactionalEventListener
     public void registerKeyword(ShareRegisterEvent event) {
-        notificationService.saveKeywordNotificationAndSend(event.getShareId(), event.getMemberId());
+        notificationService.saveKeywordNotification(event.getShareId(), event.getMemberId());
     }
 
 }

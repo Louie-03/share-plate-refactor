@@ -19,21 +19,21 @@ public class ActivityNotificationEventListener {
     @Async
     @TransactionalEventListener
     public void registerEntry(EntryEvent event) {
-        notificationService.saveActivityNotificationAndSend(
+        notificationService.saveActivityNotification(
             event.getShareId(), event.getMemberId(), ActivityType.ENTRY);
     }
 
     @Async
     @TransactionalEventListener
     public void registerEntryCancel(EntryCancelEvent event) {
-        notificationService.saveActivityNotificationAndSend(
+        notificationService.saveActivityNotification(
             event.getShareId(), event.getMemberId(), ActivityType.ENTRY_CANCEL);
     }
 
     @Async
     @TransactionalEventListener
     public void registerShareCancel(ShareCancelEvent event) {
-        notificationService.saveActivityNotificationAndSend(
+        notificationService.saveActivityNotification(
             event.getShareId(), event.getMemberId(), ActivityType.SHARE_CANCEL);
     }
 

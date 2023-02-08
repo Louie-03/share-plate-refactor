@@ -84,7 +84,7 @@ public class NotificationService {
     }
 
     @Transactional
-    public void saveKeywordNotificationAndSend(Long shareId, Long memberId) {
+    public void saveKeywordNotification(Long shareId, Long memberId) {
         Share share = shareService.findByIdOrElseThrow(shareId);
         List<Keyword> keywords = keywordRepository.findAllByContainsContentsAndNotMemberIdAndAroundShare(
             memberId, share.getTitle(), share.getLongitude(), share.getLatitude());
@@ -103,7 +103,7 @@ public class NotificationService {
     }
 
     @Transactional
-    public void saveActivityNotificationAndSend(Long shareId, Long memberId,
+    public void saveActivityNotification(Long shareId, Long memberId,
         ActivityType activityType) {
 
         Share share = shareService.findByIdOrElseThrow(shareId);
