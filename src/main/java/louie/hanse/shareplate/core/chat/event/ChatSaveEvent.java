@@ -1,11 +1,13 @@
 package louie.hanse.shareplate.core.chat.event;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class ChatSaveEvent {
 
-    private final Long chatId;
+    private Long chatId;
 }

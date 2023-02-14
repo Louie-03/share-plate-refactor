@@ -1,14 +1,16 @@
 package louie.hanse.shareplate.core.notification.event.keyword;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class KeywordNotificationsSaveEvent {
 
-    private final List<Long> keywordNotificationIds;
-    private final List<Long> keywordIds;
+    private List<Long> keywordNotificationIds;
+    private List<Long> keywordIds;
 
 }

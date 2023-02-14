@@ -1,14 +1,16 @@
 package louie.hanse.shareplate.core.notification.event.activity;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
-@RequiredArgsConstructor
 public class ActivityNotificationsSaveEvent {
 
-    private final List<Long> activityNotificationIds;
-    private final List<Long> entryIds;
+    private List<Long> activityNotificationIds;
+    private List<Long> entryIds;
 
 }
