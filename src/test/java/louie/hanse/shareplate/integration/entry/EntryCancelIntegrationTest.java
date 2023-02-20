@@ -8,7 +8,7 @@ import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.PA
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_ID_IS_NEGATIVE;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_IS_CANCELED;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_NOT_FOUND;
-import static louie.hanse.shareplate.integration.entry.utils.EntryIntegrationTestUtils.getShareRegisterRequest;
+import static louie.hanse.shareplate.integration.entry.utils.EntryIntegrationTestUtils.createShareRegisterRequest;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
@@ -166,7 +166,7 @@ class EntryCancelIntegrationTest extends InitIntegrationTest {
     void 한시간_미만_남은_쉐어일_경우_예외를_발생시킨다() throws IOException {
         String accessToken = jwtProvider.createAccessToken(2355841047L);
 
-        ShareRegisterRequest request = getShareRegisterRequest(LocalDateTime.now().plusMinutes(30));
+        ShareRegisterRequest request = createShareRegisterRequest(LocalDateTime.now().plusMinutes(30));
 
         Long shareId = shareService.register(request, 2355841047L).get("id");
 
