@@ -9,7 +9,8 @@ spring:
     password: ${DATASOURCE_PASSWORD}
 
   kafka:
-    bootstrap-servers: localhost:9092
+#    @EmbeddedKafka를 사용하지 않는 경우 kafka 주소를 localhost:9092로 설정
+    bootstrap-servers: ${spring.embedded.kafka.brokers:localhost:9092}
 
     consumer:
       group-id: consumer-group-1
