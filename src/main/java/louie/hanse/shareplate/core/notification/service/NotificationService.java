@@ -37,12 +37,12 @@ public class NotificationService {
 
     private static final ZoneOffset seoulZoneOffset = ZoneOffset.of("+9");
 
+    private final TaskScheduler taskScheduler;
     private final EntryRepository entryRepository;
     private final NotificationRepository notificationRepository;
     private final KeywordRepository keywordRepository;
     private final ShareService shareService;
     private final MemberService memberService;
-    private final TaskScheduler taskScheduler;
     private final ApplicationEventPublisher eventPublisher;
 
     public List<ActivityNotificationResponse> getActivityNotificationList(Long memberId) {
@@ -107,14 +107,25 @@ public class NotificationService {
         ActivityType activityType) {
 
         Share share = shareService.findByIdOrElseThrow(shareId);
-        Member member = memberService.findByIdOrElseThrow(memberId);
-        List<Entry> entries = entryRepository.findAllByShareIdAndNotMemberId(shareId,
-            memberId);
+        List<Entry> entries;
+        if (activityType.isDeadLine()) {
+            entries = entryRepository.findAllByShareId(shareId);
+        } else {
+            entries = entryRepository.findAllByShareIdAndNotMemberId(shareId, memberId);
+        }
 
         List<ActivityNotification> activityNotifications = new ArrayList<>();
         for (Entry entry : entries) {
-            ActivityNotification activityNotification = new ActivityNotification(share,
-                entry.getMember(), NotificationType.ACTIVITY, activityType, member);
+            ActivityNotification activityNotification;
+            if (activityType.isDeadLine()) {
+                activityNotification = new ActivityNotification(
+                    share, entry.getMember(), NotificationType.ACTIVITY, ActivityType.DEADLINE);
+            } else {
+                Member member = memberService.findByIdOrElseThrow(memberId);
+
+                activityNotification = new ActivityNotification(share,
+                    entry.getMember(), NotificationType.ACTIVITY, activityType, member);
+            }
             activityNotifications.add(activityNotification);
         }
         notificationRepository.saveAll(activityNotifications);
@@ -146,30 +157,8 @@ public class NotificationService {
         Instant instant = share.getClosedDateTime().minusMinutes(30)
             .toInstant(seoulZoneOffset);
 
-        taskScheduler.schedule(() -> {
-            List<Entry> entries = entryRepository.findAllByShareId(shareId);
-
-            List<ActivityNotification> activityNotifications = new ArrayList<>();
-            List<ActivityNotificationResponse> activityNotificationResponses = new ArrayList<>();
-            for (Entry entry : entries) {
-                ActivityNotification activityNotification = new ActivityNotification(
-                    share, entry.getMember(), NotificationType.ACTIVITY, ActivityType.DEADLINE);
-                activityNotificationResponses.add(
-                    new ActivityNotificationResponse(activityNotification));
-            }
-            notificationRepository.saveAll(activityNotifications);
-
-            List<Long> notificationIds = activityNotifications.stream()
-                .map(Notification::getId)
-                .collect(Collectors.toList());
-
-            List<Long> entryIds = entries.stream()
-                .map(Entry::getId)
-                .collect(Collectors.toList());
-
-            eventPublisher.publishEvent(new ActivityNotificationsSaveEvent(notificationIds, entryIds));
-
-        }, instant);
+        taskScheduler.schedule(() -> saveActivityNotification(shareId, null, ActivityType.DEADLINE),
+            instant);
     }
 
     private void sendKeywordNotifications(List<Keyword> keywords,

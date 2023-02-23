@@ -33,8 +33,7 @@ public class ActivityNotification extends Notification {
 
     public ActivityNotification(Share share, Member member, NotificationType type,
         ActivityType activityType) {
-        super(share, member, type);
-        this.activityType = activityType;
+        this(share, member, type, activityType, null);
     }
 
     public boolean isDeadLine() {
