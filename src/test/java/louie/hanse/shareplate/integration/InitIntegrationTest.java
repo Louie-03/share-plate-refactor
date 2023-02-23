@@ -1,10 +1,12 @@
 package louie.hanse.shareplate.integration;
 
+import static org.awaitility.Awaitility.await;
 import static org.springframework.http.HttpHeaders.CONNECTION;
 import static org.springframework.http.HttpHeaders.CONTENT_LENGTH;
 import static org.springframework.http.HttpHeaders.DATE;
 import static org.springframework.http.HttpHeaders.HOST;
 import static org.springframework.http.HttpHeaders.TRANSFER_ENCODING;
+import static org.springframework.http.HttpHeaders.VARY;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.removeHeaders;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
@@ -12,8 +14,12 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import louie.hanse.shareplate.common.jwt.JwtProvider;
 import louie.hanse.shareplate.config.S3MockConfig;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -22,10 +28,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpHeaders;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.scheduling.annotation.AsyncConfigurer;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.context.jdbc.Sql;
 
 @EmbeddedKafka(partitions = 1)
@@ -42,6 +49,9 @@ public class InitIntegrationTest {
     @Autowired
     protected JwtProvider jwtProvider;
 
+    @Autowired
+    private AsyncConfigurer asyncConfigurer;
+
     protected RequestSpecification documentationSpec;
 
     @BeforeEach
@@ -56,9 +66,27 @@ public class InitIntegrationTest {
                         removeHeaders(HOST, CONTENT_LENGTH))
                     .withResponseDefaults(
                         prettyPrint(),
-                        removeHeaders(CONTENT_LENGTH, CONNECTION, DATE, TRANSFER_ENCODING, "Keep-Alive",
-                            HttpHeaders.VARY))
+                        removeHeaders(CONTENT_LENGTH, CONNECTION, DATE, TRANSFER_ENCODING,
+                            "Keep-Alive", VARY))
             )
             .build();
     }
+
+    @AfterEach
+    void tearDown() {
+        await()
+            .atMost(3, TimeUnit.SECONDS)
+            .with()
+            .until(isAllTaskComplete(getThreadPoolExecutor()));
+    }
+
+    private Callable<Boolean> isAllTaskComplete(ThreadPoolExecutor threadPoolExecutor) {
+        return () -> threadPoolExecutor.getTaskCount()
+            == threadPoolExecutor.getCompletedTaskCount();
+    }
+
+    private ThreadPoolExecutor getThreadPoolExecutor() {
+        return ((ThreadPoolTaskExecutor) asyncConfigurer.getAsyncExecutor()).getThreadPoolExecutor();
+    }
+
 }
