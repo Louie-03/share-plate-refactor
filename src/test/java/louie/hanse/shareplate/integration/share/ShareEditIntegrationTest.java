@@ -18,7 +18,7 @@ import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SH
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_IS_CANCELED;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_IS_CLOSED;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_NOT_FOUND;
-import static louie.hanse.shareplate.integration.entry.utils.EntryIntegrationTestUtils.getShareRegisterRequest;
+import static louie.hanse.shareplate.integration.entry.utils.EntryIntegrationTestUtils.createShareRegisterRequest;
 import static louie.hanse.shareplate.integration.share.utils.ShareIntegrationTestUtils.createMultiPartSpecification;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -620,7 +620,7 @@ class ShareEditIntegrationTest extends InitIntegrationTest {
         Long writerId = 2370842997L;
 
         Long shareId = shareService.register(
-            getShareRegisterRequest(LocalDateTime.now().plusMinutes(30)), writerId).get("id");
+            createShareRegisterRequest(LocalDateTime.now().plusMinutes(30)), writerId).get("id");
 
         String accessToken = jwtProvider.createAccessToken(writerId);
 

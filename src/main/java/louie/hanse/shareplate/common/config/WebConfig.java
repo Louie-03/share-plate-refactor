@@ -18,12 +18,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Configuration
 @RequiredArgsConstructor
+@EnableScheduling
+@Configuration
 public class WebConfig implements WebMvcConfigurer {
 
     public static final String LOCAL_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";

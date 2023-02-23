@@ -72,6 +72,14 @@ public class ShareRegisterRequest {
         return images;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
     public List<String> getHashtags() {
         return hashtags;
     }

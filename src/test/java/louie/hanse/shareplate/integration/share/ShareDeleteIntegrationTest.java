@@ -5,7 +5,7 @@ import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.CL
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.IS_NOT_WRITER;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_ID_IS_NEGATIVE;
 import static louie.hanse.shareplate.common.exception.type.ShareExceptionType.SHARE_NOT_FOUND;
-import static louie.hanse.shareplate.integration.entry.utils.EntryIntegrationTestUtils.getShareRegisterRequest;
+import static louie.hanse.shareplate.integration.entry.utils.EntryIntegrationTestUtils.createShareRegisterRequest;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
@@ -100,7 +100,7 @@ class ShareDeleteIntegrationTest extends InitIntegrationTest {
         Long writerId = 2370842997L;
 
         Long shareId = shareService.register(
-            getShareRegisterRequest(LocalDateTime.now().plusMinutes(30)), writerId).get("id");
+            createShareRegisterRequest(LocalDateTime.now().plusMinutes(30)), writerId).get("id");
 
         String accessToken = jwtProvider.createAccessToken(writerId);
 

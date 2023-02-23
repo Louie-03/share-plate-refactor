@@ -7,7 +7,7 @@ import static louie.hanse.shareplate.common.exception.type.ChatRoomExceptionType
 import static louie.hanse.shareplate.common.exception.type.ChatRoomExceptionType.EMPTY_CHATROOM_INFO;
 import static louie.hanse.shareplate.common.exception.type.ChatRoomExceptionType.SHARE_WRITER_CANNOT_LEAVE;
 import static louie.hanse.shareplate.common.exception.type.MemberExceptionType.MEMBER_NOT_FOUND;
-import static louie.hanse.shareplate.integration.entry.utils.EntryIntegrationTestUtils.getShareRegisterRequest;
+import static louie.hanse.shareplate.integration.entry.utils.EntryIntegrationTestUtils.createShareRegisterRequest;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
@@ -64,7 +64,7 @@ class ChatRoomMemberChatRoomExitIntegrationTest extends InitIntegrationTest {
     void 한시간_미만_남은_쉐어의_문의_채팅방을_나간다() throws IOException {
         String accessToken = jwtProvider.createAccessToken(2370842997L);
 
-        ShareRegisterRequest request = getShareRegisterRequest(LocalDateTime.now().plusMinutes(30));
+        ShareRegisterRequest request = createShareRegisterRequest(LocalDateTime.now().plusMinutes(30));
         Long shareId = shareService.register(request, 2355841047L).get("id");
         chatRoomService.createQuestionChatRoom(2370842997L, shareId);
 
