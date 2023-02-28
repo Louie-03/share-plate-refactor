@@ -1,6 +1,5 @@
 package louie.hanse.shareplate.integration;
 
-import static org.awaitility.Awaitility.await;
 import static org.springframework.http.HttpHeaders.CONNECTION;
 import static org.springframework.http.HttpHeaders.CONTENT_LENGTH;
 import static org.springframework.http.HttpHeaders.DATE;
@@ -14,7 +13,6 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import louie.hanse.shareplate.common.jwt.JwtProvider;
@@ -73,20 +71,22 @@ public class InitIntegrationTest {
     }
 
     @AfterEach
-    void tearDown() {
-        await()
-            .atMost(3, TimeUnit.SECONDS)
-            .with()
-            .until(isAllTaskComplete(getThreadPoolExecutor()));
+    void tearDown() throws InterruptedException {
+        ThreadPoolTaskExecutor executor = getThreadPoolTaskExecutor();
+        ThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();
+        threadPoolExecutor.shutdown();
+        if (!threadPoolExecutor.awaitTermination(3000, TimeUnit.MILLISECONDS)) {
+            executor.shutdown();
+        }
+        executor.initialize();
     }
 
-    private Callable<Boolean> isAllTaskComplete(ThreadPoolExecutor threadPoolExecutor) {
-        return () -> threadPoolExecutor.getTaskCount()
-            == threadPoolExecutor.getCompletedTaskCount();
+    private ThreadPoolTaskExecutor getThreadPoolTaskExecutor() {
+        return (ThreadPoolTaskExecutor) asyncConfigurer.getAsyncExecutor();
     }
 
     private ThreadPoolExecutor getThreadPoolExecutor() {
-        return ((ThreadPoolTaskExecutor) asyncConfigurer.getAsyncExecutor()).getThreadPoolExecutor();
+        return getThreadPoolTaskExecutor().getThreadPoolExecutor();
     }
 
 }
