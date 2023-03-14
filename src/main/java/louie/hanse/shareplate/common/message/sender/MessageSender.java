@@ -12,7 +12,7 @@ import louie.hanse.shareplate.core.notification.domain.Notification;
 import louie.hanse.shareplate.core.notification.dto.response.ActivityNotificationResponse;
 import louie.hanse.shareplate.core.notification.dto.response.KeywordNotificationResponse;
 import louie.hanse.shareplate.core.notification.service.NotificationService;
-import org.springframework.messaging.core.MessageSendingOperations;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class MessageSender {
 
-    private final MessageSendingOperations messageSendingOperations;
+    private final SimpMessagingTemplate simpMessagingTemplate;
     private final NotificationService notificationService;
     private final ChatRepository chatRepository;
 
@@ -33,7 +33,7 @@ public class MessageSender {
 
             String destination = "/queue/notifications/entries/" + entryIds.get(i);
 
-            messageSendingOperations.convertAndSend(destination,
+            simpMessagingTemplate.convertAndSend(destination,
                 new ActivityNotificationResponse(activityNotification));
         }
     }
@@ -47,7 +47,7 @@ public class MessageSender {
 
             String destination = "/queue/notifications/keywords/" + keywordIds.get(i);
 
-            messageSendingOperations.convertAndSend(destination,
+            simpMessagingTemplate.convertAndSend(destination,
                 new KeywordNotificationResponse(notification));
         }
     }
@@ -63,7 +63,7 @@ public class MessageSender {
 
             String destination = "/topic/chatroom-members/" + chatRoomMember.getId();
 
-            messageSendingOperations.convertAndSend(destination, chatDetailResponse);
+            simpMessagingTemplate.convertAndSend(destination, chatDetailResponse);
         }
     }
 
