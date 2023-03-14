@@ -1,13 +1,13 @@
 buildscript {
 	ext {
-		queryDslVersion = "5.0.0"
+		queryDslVersion = '5.0.0'
 	}
 }
 
 plugins {
 	id 'org.springframework.boot' version '2.7.2'
 	id 'io.spring.dependency-management' version '1.0.12.RELEASE'
-	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+	id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
 	id 'org.asciidoctor.jvm.convert' version '3.3.2'
 	id 'java'
 }
@@ -29,7 +29,7 @@ repositories {
 }
 
 ext {
-	set('snippetsDir', file("build/generated-snippets"))
+	set('snippetsDir', file('build/generated-snippets'))
 }
 
 dependencies {
@@ -64,8 +64,8 @@ dependencies {
 	implementation 'com.auth0:java-jwt:3.19.1'
 
 	// QueryDSL
-	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+	implementation 'com.querydsl:querydsl-jpa:${queryDslVersion}'
+	annotationProcessor 'com.querydsl:querydsl-apt:${queryDslVersion}'
 
 	// AWS
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
@@ -99,7 +99,7 @@ asciidoctor {
 	configurations 'asciidoctorExtensions'
 
 	sources{
-		include("**/index.adoc")
+		include('**/index.adoc')
 	}
 
 	baseDirFollowsSourceFile()
@@ -112,15 +112,15 @@ asciidoctor.doFirst {
 
 task copyDocument(type: Copy) {
 	dependsOn asciidoctor
-	from file("build/docs/asciidoc")
-	into file("src/main/resources/static/docs")
+	from file('build/docs/asciidoc')
+	into file('src/main/resources/static/docs')
 }
 
 build {
 	dependsOn copyDocument
 	dependsOn asciidoctor
 	copy {
-		from "${asciidoctor.outputDir}"
+		from '${asciidoctor.outputDir}'
 		into 'src/main/resources/static/docs'
 	}
 }
@@ -132,10 +132,10 @@ jar {
 bootJar {
 	archivesBaseName = 'app'
 	archiveFileName = 'app.jar'
-	archiveVersion = "0.0.0"
+	archiveVersion = '0.0.0'
 }
 
-def querydslDir = "$buildDir/generated/querydsl"
+def querydslDir = '$buildDir/generated/querydsl'
 
 querydsl {
 	jpa = true
