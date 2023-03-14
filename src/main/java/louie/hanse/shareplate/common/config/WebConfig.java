@@ -1,5 +1,6 @@
 package louie.hanse.shareplate.common.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.time.format.DateTimeFormatter;
@@ -13,6 +14,8 @@ import louie.hanse.shareplate.common.interceptor.MemberVerificationInterceptor;
 import louie.hanse.shareplate.common.interceptor.ReissueAccessTokenInterceptor;
 import louie.hanse.shareplate.common.jwt.JwtProvider;
 import louie.hanse.shareplate.core.member.service.LoginService;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -84,4 +87,10 @@ public class WebConfig implements WebMvcConfigurer {
             .exposedHeaders("*")
             .allowedHeaders("*");
     }
+
+    @Bean
+    public MessageConverter messageConverter(ObjectMapper objectMapper) {
+        return new Jackson2JsonMessageConverter(objectMapper);
+    }
+
 }
