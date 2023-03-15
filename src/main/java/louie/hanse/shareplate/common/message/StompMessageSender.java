@@ -1,4 +1,4 @@
-package louie.hanse.shareplate.common.message.event.listener;
+package louie.hanse.shareplate.common.message;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Component
-public class MessageSenderEventListener {
+public class StompMessageSender {
 
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final NotificationService notificationService;
