@@ -1,4 +1,4 @@
-package louie.hanse.shareplate.common.kafka;
+package louie.hanse.shareplate.common.message;
 
 import lombok.RequiredArgsConstructor;
 import louie.hanse.shareplate.core.chat.event.ChatSaveEvent;
@@ -11,7 +11,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 @RequiredArgsConstructor
 @Component
-public class KafkaProducer {
+public class MessagePublisher {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
