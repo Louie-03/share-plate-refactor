@@ -49,6 +49,10 @@ dependencies {
 	// AMQP(RabbitMQ)
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
+	// Testcontainers
+	testImplementation 'org.testcontainers:junit-jupiter:1.17.2'
+	testImplementation 'org.testcontainers:rabbitmq:1.17.2'
+
 	// Dev
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -67,8 +71,8 @@ dependencies {
 	implementation 'com.auth0:java-jwt:3.19.1'
 
 	// QueryDSL
-	implementation 'com.querydsl:querydsl-jpa:${queryDslVersion}'
-	annotationProcessor 'com.querydsl:querydsl-apt:${queryDslVersion}'
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 
 	// AWS
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
@@ -123,7 +127,7 @@ build {
 	dependsOn copyDocument
 	dependsOn asciidoctor
 	copy {
-		from '${asciidoctor.outputDir}'
+		from "${asciidoctor.outputDir}"
 		into 'src/main/resources/static/docs'
 	}
 }
@@ -138,7 +142,7 @@ bootJar {
 	archiveVersion = '0.0.0'
 }
 
-def querydslDir = '$buildDir/generated/querydsl'
+def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
 	jpa = true
