@@ -15,7 +15,7 @@ import louie.hanse.shareplate.core.notification.dto.response.KeywordNotification
 import louie.hanse.shareplate.core.notification.event.activity.ActivityNotificationsSaveEvent;
 import louie.hanse.shareplate.core.notification.event.keyword.KeywordNotificationsSaveEvent;
 import louie.hanse.shareplate.core.notification.service.NotificationService;
-import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +29,7 @@ public class StompMessageSender {
     private final ChatRepository chatRepository;
 
     @Transactional(readOnly = true)
-    @KafkaListener(topics = "activity-notifications-save")
+    @RabbitListener(queues = "activity-notifications-save")
     public void sendActivityNotifications(ActivityNotificationsSaveEvent event) {
         List<Long> activityNotificationIds = event.getActivityNotificationIds();
 
@@ -45,7 +45,7 @@ public class StompMessageSender {
     }
 
     @Transactional(readOnly = true)
-    @KafkaListener(topics = "keyword-notifications-save")
+    @RabbitListener(queues = "keyword-notifications-save")
     public void sendKeywordNotifications(KeywordNotificationsSaveEvent event) {
         List<Long> keywordNotificationIds = event.getKeywordNotificationIds();
 
@@ -61,7 +61,7 @@ public class StompMessageSender {
     }
 
     @Transactional(readOnly = true)
-    @KafkaListener(topics = "chat-save")
+    @RabbitListener(queues = "chat-save")
     public void sendChatDetail(ChatSaveEvent event) {
         Chat chat = chatRepository.findWithShareWriterAndChatRoomMemberAndMember(event.getChatId());
         ChatRoom chatRoom = chat.getChatRoom();
