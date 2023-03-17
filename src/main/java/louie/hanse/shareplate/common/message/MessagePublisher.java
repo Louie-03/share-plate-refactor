@@ -1,36 +1,40 @@
-package louie.hanse.shareplate.common.kafka;
+package louie.hanse.shareplate.common.message;
 
 import lombok.RequiredArgsConstructor;
 import louie.hanse.shareplate.core.chat.event.ChatSaveEvent;
 import louie.hanse.shareplate.core.notification.event.activity.ActivityNotificationsSaveEvent;
 import louie.hanse.shareplate.core.notification.event.keyword.KeywordNotificationsSaveEvent;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @RequiredArgsConstructor
 @Component
-public class KafkaProducer {
+public class MessagePublisher {
 
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final RabbitTemplate rabbitTemplate;
 
     @Async
     @TransactionalEventListener
     public void sendActivityNotificationsSaveEvent(ActivityNotificationsSaveEvent event) {
-        kafkaTemplate.send("activity-notifications-save", event);
+        convertAndSendFanoutExchange("activity-notifications-save", event);
     }
 
     @Async
     @TransactionalEventListener
     public void sendKeywordNotificationsSaveEvent(KeywordNotificationsSaveEvent event) {
-        kafkaTemplate.send("keyword-notifications-save", event);
+        convertAndSendFanoutExchange("keyword-notifications-save", event);
     }
 
     @Async
     @TransactionalEventListener
     public void sendChatSaveEvent(ChatSaveEvent event) {
-        kafkaTemplate.send("chat-save", event);
+        convertAndSendFanoutExchange("chat-save", event);
+    }
+
+    private void convertAndSendFanoutExchange(String exchange, Object event) {
+        rabbitTemplate.convertAndSend(exchange, "", event);
     }
 
 }

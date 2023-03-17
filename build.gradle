@@ -1,13 +1,13 @@
 buildscript {
 	ext {
-		queryDslVersion = "5.0.0"
+		queryDslVersion = '5.0.0'
 	}
 }
 
 plugins {
 	id 'org.springframework.boot' version '2.7.2'
 	id 'io.spring.dependency-management' version '1.0.12.RELEASE'
-	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+	id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
 	id 'org.asciidoctor.jvm.convert' version '3.3.2'
 	id 'java'
 }
@@ -29,7 +29,7 @@ repositories {
 }
 
 ext {
-	set('snippetsDir', file("build/generated-snippets"))
+	set('snippetsDir', file('build/generated-snippets'))
 }
 
 dependencies {
@@ -45,6 +45,13 @@ dependencies {
 	//	Kafka
 	implementation 'org.springframework.kafka:spring-kafka'
 	implementation 'org.springframework.kafka:spring-kafka-test'
+
+	// AMQP(RabbitMQ)
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
+	// Testcontainers
+	testImplementation 'org.testcontainers:junit-jupiter:1.17.2'
+	testImplementation 'org.testcontainers:rabbitmq:1.17.2'
 
 	// Dev
 	compileOnly 'org.projectlombok:lombok'
@@ -99,7 +106,7 @@ asciidoctor {
 	configurations 'asciidoctorExtensions'
 
 	sources{
-		include("**/index.adoc")
+		include('**/index.adoc')
 	}
 
 	baseDirFollowsSourceFile()
@@ -112,8 +119,8 @@ asciidoctor.doFirst {
 
 task copyDocument(type: Copy) {
 	dependsOn asciidoctor
-	from file("build/docs/asciidoc")
-	into file("src/main/resources/static/docs")
+	from file('build/docs/asciidoc')
+	into file('src/main/resources/static/docs')
 }
 
 build {
@@ -132,7 +139,7 @@ jar {
 bootJar {
 	archivesBaseName = 'app'
 	archiveFileName = 'app.jar'
-	archiveVersion = "0.0.0"
+	archiveVersion = '0.0.0'
 }
 
 def querydslDir = "$buildDir/generated/querydsl"

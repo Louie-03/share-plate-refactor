@@ -41,7 +41,7 @@ spring:
     open-in-view: false
 
   config:
-    import: classpath:oauth.yml,classpath:s3.yml
+    import: classpath:oauth.yml,classpath:s3.yml,classpath:rabbitmq.yml
 
 logging.level:
   org:
