@@ -13,8 +13,6 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import louie.hanse.shareplate.common.jwt.JwtProvider;
 import louie.hanse.shareplate.config.RabbitTestConfig;
 import louie.hanse.shareplate.config.S3MockConfig;
@@ -23,7 +21,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.extension.ExtendWith;
- import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistry;
+import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -93,14 +91,10 @@ public class InitIntegrationTest {
     }
 
     @AfterEach
-    void tearDown() throws InterruptedException {
-        ThreadPoolTaskExecutor executor = getThreadPoolTaskExecutor();
-        ThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();
-        threadPoolExecutor.shutdown();
-        if (!threadPoolExecutor.awaitTermination(3000, TimeUnit.MILLISECONDS)) {
-            executor.shutdown();
-        }
-        executor.initialize();
+    void tearDown() {
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = getThreadPoolTaskExecutor();
+        threadPoolTaskExecutor.shutdown();
+        threadPoolTaskExecutor.initialize();
 
         rabbitListenerEndpointRegistry.stop();
         rabbitListenerEndpointRegistry.start();
@@ -108,10 +102,6 @@ public class InitIntegrationTest {
 
     private ThreadPoolTaskExecutor getThreadPoolTaskExecutor() {
         return (ThreadPoolTaskExecutor) asyncConfigurer.getAsyncExecutor();
-    }
-
-    private ThreadPoolExecutor getThreadPoolExecutor() {
-        return getThreadPoolTaskExecutor().getThreadPoolExecutor();
     }
 
 }
