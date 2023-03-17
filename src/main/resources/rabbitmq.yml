@@ -6,3 +6,6 @@ spring:
     password: ${RABBIT_MQ_PASSWORD}
     ssl:
       enabled: true
+    listener:
+      simple:
+        acknowledge-mode: none
