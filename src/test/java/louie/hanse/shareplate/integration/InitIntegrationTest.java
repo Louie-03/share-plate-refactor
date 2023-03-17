@@ -23,6 +23,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.extension.ExtendWith;
+ import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -54,6 +55,9 @@ public class InitIntegrationTest {
 
     @Autowired
     private AsyncConfigurer asyncConfigurer;
+
+    @Autowired
+    RabbitListenerEndpointRegistry rabbitListenerEndpointRegistry;
 
     protected RequestSpecification documentationSpec;
 
@@ -97,6 +101,9 @@ public class InitIntegrationTest {
             executor.shutdown();
         }
         executor.initialize();
+
+        rabbitListenerEndpointRegistry.stop();
+        rabbitListenerEndpointRegistry.start();
     }
 
     private ThreadPoolTaskExecutor getThreadPoolTaskExecutor() {
