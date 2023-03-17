@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import louie.hanse.shareplate.core.entry.service.EntryService;
-import louie.hanse.shareplate.core.notification.service.NotificationService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class EntryController {
 
     private final EntryService entryService;
-    private final NotificationService notificationService;
 
     @GetMapping("/entries")
     public Map<String, List<Long>> getIdList(HttpServletRequest request) {
