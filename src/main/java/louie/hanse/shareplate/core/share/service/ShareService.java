@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import louie.hanse.shareplate.common.exception.GlobalException;
 import louie.hanse.shareplate.common.exception.type.ShareExceptionType;
 import louie.hanse.shareplate.common.jwt.JwtProvider;
@@ -42,6 +43,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -58,6 +60,8 @@ public class ShareService {
     @Transactional
     public Map<String, Long> register(ShareRegisterRequest request, Long memberId)
         throws IOException {
+        log.info("registerShare");
+
         Member member = memberService.findByIdOrElseThrow(memberId);
         Share share = request.toEntity(member);
         for (MultipartFile image : request.getImages()) {
@@ -76,7 +80,16 @@ public class ShareService {
         new ChatRoom(member, share, ChatRoomType.ENTRY);
         shareRepository.save(share);
 
+        log.info("이벤트 발행 전");
         eventPublisher.publishEvent(new ShareRegisterEvent(share.getId(), memberId));
+        log.info("이벤트 발행 후");
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        log.info("쉐어 등록 완료");
 
         return Map.of("id", share.getId(), "entryId", entry.getId());
     }
