@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import louie.hanse.shareplate.common.argumentresolver.MemberVerification;
 import louie.hanse.shareplate.core.share.dto.request.ShareEditRequest;
 import louie.hanse.shareplate.core.share.dto.request.ShareMineSearchRequest;
 import louie.hanse.shareplate.core.share.dto.request.ShareRecommendationRequest;
@@ -40,11 +41,10 @@ public class ShareController {
 
     @PostMapping
     public Map<String, Long> register(@Valid ShareRegisterRequest shareRegisterRequest,
-        HttpServletRequest request)
+        @MemberVerification Long memberId)
         throws IOException {
 
-        Map<String, Long> map = shareService.register(shareRegisterRequest,
-            (Long) request.getAttribute("memberId"));
+        Map<String, Long> map = shareService.register(shareRegisterRequest, memberId);
 
         return Collections.singletonMap("entryId", map.get("entryId"));
     }
@@ -58,10 +58,9 @@ public class ShareController {
 
     @GetMapping("/mine")
     public List<ShareSearchResponse> searchMine(
-        @Valid ShareMineSearchRequest shareMineSearchRequest, HttpServletRequest request) {
+        @Valid ShareMineSearchRequest shareMineSearchRequest, @MemberVerification Long memberId) {
 
-        return shareService.searchMine(shareMineSearchRequest,
-            (Long) request.getAttribute("memberId"));
+        return shareService.searchMine(shareMineSearchRequest, memberId);
     }
 
     @GetMapping("/{id}")
@@ -76,16 +75,16 @@ public class ShareController {
     public void edit(
         @PathVariable(required = false) @NotNull(message = "PathVariable의 shareId가 비어있습니다.")
         @Positive(message = "쉐어 id는 양수여야 합니다.") Long id, @Valid ShareEditRequest shareEditRequest,
-        HttpServletRequest request) throws IOException {
+        @MemberVerification Long memberId) throws IOException {
 
-        shareService.edit(shareEditRequest, id, (Long) request.getAttribute("memberId"));
+        shareService.edit(shareEditRequest, id, memberId);
     }
 
     @DeleteMapping("/{id}")
     public void cancel(@PathVariable @Positive(message = "쉐어 id는 양수여야 합니다.") Long id,
-        HttpServletRequest request) {
+        @MemberVerification Long memberId) {
 
-        shareService.cancel(id, (Long) request.getAttribute("memberId"));
+        shareService.cancel(id, memberId);
     }
 
     @GetMapping("/recommendation")

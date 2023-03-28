@@ -2,11 +2,11 @@ package louie.hanse.shareplate.core.notification.controller;
 
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import louie.hanse.shareplate.common.argumentresolver.MemberVerification;
 import louie.hanse.shareplate.core.notification.dto.response.ActivityNotificationResponse;
 import louie.hanse.shareplate.core.notification.dto.response.KeywordNotificationResponse;
 import louie.hanse.shareplate.core.notification.service.NotificationService;
@@ -25,14 +25,12 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @GetMapping("/notifications/activity")
-    public List<ActivityNotificationResponse> activityNotificationList(HttpServletRequest request) {
-        Long memberId = (Long) request.getAttribute("memberId");
+    public List<ActivityNotificationResponse> activityNotificationList(@MemberVerification Long memberId) {
         return notificationService.getActivityNotificationList(memberId);
     }
 
     @GetMapping("/notifications/keyword")
-    public List<KeywordNotificationResponse> keywordNotificationList(HttpServletRequest request) {
-        Long memberId = (Long) request.getAttribute("memberId");
+    public List<KeywordNotificationResponse> keywordNotificationList(@MemberVerification Long memberId) {
         return notificationService.getKeywordNotificationList(memberId);
     }
 
@@ -40,8 +38,7 @@ public class NotificationController {
     public void deleteOnlyOneNotification(@PathVariable(required = false)
     @NotNull(message = "PathVariable의 notificationId가 비어있습니다.")
     @Positive(message = "알림 id는 양수여야 합니다.") Long id,
-        HttpServletRequest request) {
-        Long memberId = (Long) request.getAttribute("memberId");
+        @MemberVerification Long memberId) {
         notificationService.delete(id, memberId);
     }
 
@@ -49,8 +46,7 @@ public class NotificationController {
     public void deleteSelectionNotification(@RequestBody Map<String, @Valid List<@Valid
         @NotNull(message = "PathVariable의 notificationId가 비어있습니다.")
         @Positive(message = "알림 id는 양수여야 합니다.") Long>> map,
-        HttpServletRequest request) {
-        Long memberId = (Long) request.getAttribute("memberId");
+        @MemberVerification Long memberId) {
         List<Long> idList = map.get("idList");
         notificationService.deleteAll(idList, memberId);
     }

@@ -6,14 +6,14 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import louie.hanse.shareplate.oauth.OAuthProperties;
-import louie.hanse.shareplate.oauth.OAuthUserInfo;
-import louie.hanse.shareplate.oauth.service.OAuthService;
-import louie.hanse.shareplate.core.member.domain.Member;
 import louie.hanse.shareplate.common.exception.GlobalException;
 import louie.hanse.shareplate.common.exception.type.AuthExceptionType;
 import louie.hanse.shareplate.common.jwt.JwtProvider;
+import louie.hanse.shareplate.core.member.domain.Member;
 import louie.hanse.shareplate.core.member.service.LoginService;
+import louie.hanse.shareplate.oauth.OAuthProperties;
+import louie.hanse.shareplate.oauth.OAuthUserInfo;
+import louie.hanse.shareplate.oauth.service.OAuthService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -65,7 +65,7 @@ public class OAuthController {
     public void reissueAccessToken(HttpServletRequest request, HttpServletResponse response) {
         Long refreshTokenMemberId = (Long) request.getAttribute("refreshTokenMemberId");
         String reissueAccessToken = jwtProvider.createAccessToken(refreshTokenMemberId);
-            response.setHeader("Access-Token", reissueAccessToken);
+        response.setHeader("Access-Token", reissueAccessToken);
     }
 
     @PostMapping("/logout")

@@ -4,13 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import louie.hanse.shareplate.common.argumentresolver.MemberVerificationArgumentResolver;
 import louie.hanse.shareplate.common.converter.StringToChatRoomTypeConverter;
 import louie.hanse.shareplate.common.converter.StringToMineTypeConverter;
 import louie.hanse.shareplate.common.converter.StringToShareTypeConverter;
 import louie.hanse.shareplate.common.interceptor.LoginVerificationInterceptor;
 import louie.hanse.shareplate.common.interceptor.LogoutInterceptor;
-import louie.hanse.shareplate.common.interceptor.MemberVerificationInterceptor;
 import louie.hanse.shareplate.common.interceptor.ReissueAccessTokenInterceptor;
 import louie.hanse.shareplate.common.jwt.JwtProvider;
 import louie.hanse.shareplate.core.member.service.LoginService;
@@ -22,6 +23,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -37,15 +39,12 @@ public class WebConfig implements WebMvcConfigurer {
     private final LoginService loginService;
 
     @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(new MemberVerificationArgumentResolver(jwtProvider));
+    }
+
+    @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new MemberVerificationInterceptor(jwtProvider))
-            .order(1)
-            .addPathPatterns("/members", "/members/location", "/shares", "/shares/mine",
-                "/shares/{id}", "/shares/{id}/entry", "/entries", "/wish-list", "/chatrooms/{id}",
-                "/chat-logs/update-read-time", "/chats/unread", "/chatroom-members", "/chatrooms",
-                "/keywords", "/keywords/{id}", "/keywords/location", "/notifications/activity",
-                "/notifications/keyword", "/notifications/{id}", "/notifications")
-            .excludePathPatterns("/shares/recommendation", "/shares/writer");
 
         registry.addInterceptor(new LogoutInterceptor(jwtProvider, loginService))
             .order(1)
@@ -85,7 +84,8 @@ public class WebConfig implements WebMvcConfigurer {
             .allowedOrigins("*")
             .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
             .exposedHeaders("*")
-            .allowedHeaders("*");
+            .allowedHeaders("*")
+            .maxAge(0);
     }
 
     @Bean

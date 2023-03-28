@@ -1,11 +1,11 @@
 package louie.hanse.shareplate.core.chatroom.controller;
 
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import louie.hanse.shareplate.common.argumentresolver.MemberVerification;
 import louie.hanse.shareplate.core.chatroom.service.ChatLogService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,8 +22,7 @@ public class ChatLogController {
     @PutMapping("/chat-logs/update-read-time")
     public void updateRecentReadDateTime(
         @RequestBody Map<String, @Valid @NotNull(message = "요청한 채팅방정보 필드값이 비어있습니다.") @Positive(message = "채팅방 id는 양수여야 합니다.") Long> map,
-        HttpServletRequest request) {
-        Long memberId = (Long) request.getAttribute("memberId");
+        @MemberVerification Long memberId) {
         Long chatRoomId = map.get("chatRoomId");
         chatLogService.updateRecentReadDateTime(memberId, chatRoomId);
     }
