@@ -1,10 +1,10 @@
 package louie.hanse.shareplate.core.keyword.controller;
 
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import louie.hanse.shareplate.common.argumentresolver.MemberVerification;
 import louie.hanse.shareplate.core.keyword.dto.request.KeywordLocationDeleteRequest;
 import louie.hanse.shareplate.core.keyword.dto.request.KeywordLocationListRequest;
 import louie.hanse.shareplate.core.keyword.dto.request.KeywordRegisterRequest;
@@ -30,37 +30,32 @@ public class KeywordController {
     private final KeywordService keywordService;
 
     @GetMapping
-    public List<KeywordListResponse> getKeywords(HttpServletRequest request) {
-        Long memberId = (Long) request.getAttribute("memberId");
+    public List<KeywordListResponse> getKeywords(@MemberVerification Long memberId) {
         return keywordService.getKeywords(memberId);
     }
 
     @GetMapping("/location")
     public KeywordLocationListResponse getLocations(
-        KeywordLocationListRequest keywordLocationListRequest, HttpServletRequest request) {
-        Long memberId = (Long) request.getAttribute("memberId");
+        KeywordLocationListRequest keywordLocationListRequest, @MemberVerification Long memberId) {
         return keywordService.getLocations(keywordLocationListRequest, memberId);
     }
 
     @PostMapping
     public KeywordRegisterResponse register(
-        @RequestBody KeywordRegisterRequest keywordRegisterRequest, HttpServletRequest request) {
-        Long memberId = (Long) request.getAttribute("memberId");
+        @RequestBody KeywordRegisterRequest keywordRegisterRequest, @MemberVerification Long memberId) {
         return keywordService.register(keywordRegisterRequest, memberId);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable(required = false)
     @NotNull(message = "PathVariable의 keywordId가 비어있습니다.")
-    @Positive(message = "키워드 id는 양수여야 합니다.") Long id, HttpServletRequest request) {
-        Long memberId = (Long) request.getAttribute("memberId");
+    @Positive(message = "키워드 id는 양수여야 합니다.") Long id, @MemberVerification Long memberId) {
         keywordService.delete(id, memberId);
     }
 
     @DeleteMapping
     public void deleteAll(@RequestBody KeywordLocationDeleteRequest keywordLocationDeleteRequest,
-        HttpServletRequest request) {
-        Long memberId = (Long) request.getAttribute("memberId");
+        @MemberVerification Long memberId) {
         keywordService.deleteAll(keywordLocationDeleteRequest, memberId);
     }
 }
