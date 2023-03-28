@@ -84,8 +84,7 @@ public class WebConfig implements WebMvcConfigurer {
             .allowedOrigins("*")
             .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
             .exposedHeaders("*")
-            .allowedHeaders("*")
-            .maxAge(0);
+            .allowedHeaders("*");
     }
 
     @Bean
