@@ -1,4 +1,3 @@
-DELETE from advertisement;
 DELETE from keyword;
 DELETE from wish;
 DELETE from share_image;
