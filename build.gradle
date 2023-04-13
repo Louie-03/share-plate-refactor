@@ -93,6 +93,9 @@ dependencies {
 
 	// Log
 	implementation 'org.codehaus.janino:janino:3.1.6'
+
+	//	WireMock
+	implementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner:3.1.2'
 }
 
 tasks.named('test') {
