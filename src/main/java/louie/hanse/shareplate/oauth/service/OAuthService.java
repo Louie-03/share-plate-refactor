@@ -1,54 +1,28 @@
 package louie.hanse.shareplate.oauth.service;
 
 import lombok.RequiredArgsConstructor;
-import louie.hanse.shareplate.oauth.OAuthAccessToken;
 import louie.hanse.shareplate.oauth.OAuthProperties;
 import louie.hanse.shareplate.oauth.OAuthUserInfo;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.converter.FormHttpMessageConverter;
+import louie.hanse.shareplate.oauth.client.OAuthTokenClient;
+import louie.hanse.shareplate.oauth.client.OAuthUserClient;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
 public class OAuthService {
 
     private final OAuthProperties oAuthProperties;
+    private final OAuthTokenClient oAuthTokenClient;
+    private final OAuthUserClient oAuthUserClient;
 
     public String getAccessToken(String code) {
-        RestTemplate restTemplate = createRestTemplateWithFormHttpMessageConverter();
-
-        MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
-        param.add("grant_type", "authorization_code");
-        param.add("client_id", oAuthProperties.getClientId());
-        param.add("redirect_uri", oAuthProperties.getRedirectUrl());
-        param.add("code", code);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        HttpEntity<MultiValueMap<String, String>> oAuthTokenRequestHttpEntity = new HttpEntity<>(
-            param, httpHeaders);
-
-        return restTemplate.postForObject(oAuthProperties.getAccessTokenApiUrl(),
-            oAuthTokenRequestHttpEntity, OAuthAccessToken.class).getAccessToken();
+        return oAuthTokenClient.getAccessToken("authorization_code",
+            oAuthProperties.getClientId(), oAuthProperties.getRedirectUrl(), code)
+            .getAccessToken();
     }
 
     public OAuthUserInfo getUserInfo(String accessToken) {
-        RestTemplate restTemplate = createRestTemplateWithFormHttpMessageConverter();
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setBearerAuth(accessToken);
-        HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
-
-        return restTemplate.postForObject(oAuthProperties.getUserApiUrl(), httpEntity,
-            OAuthUserInfo.class);
+        return oAuthUserClient.getUserInfo("Bearer " + accessToken);
     }
 
-    private RestTemplate createRestTemplateWithFormHttpMessageConverter() {
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().add(new FormHttpMessageConverter());
-        return restTemplate;
-    }
 }
