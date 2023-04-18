@@ -6,7 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "oauth-user-client", url = "https://kapi.kakao.com")
+@FeignClient(name = "oauth-user-client", url = "${oauth.user.api_url}")
 public interface OAuthUserClient {
 
     @PostMapping("/v2/user/me")
