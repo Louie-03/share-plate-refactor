@@ -6,8 +6,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import louie.hanse.shareplate.common.exception.GlobalException;
-import louie.hanse.shareplate.common.exception.type.AuthExceptionType;
 import louie.hanse.shareplate.common.jwt.JwtProvider;
 import louie.hanse.shareplate.core.member.domain.Member;
 import louie.hanse.shareplate.core.member.service.LoginService;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,11 +38,7 @@ public class OAuthController {
         String code = paramMap.get("code");
         String oauthAccessToken;
 
-        try {
-            oauthAccessToken = oAuthService.getAccessToken(code);
-        } catch (HttpClientErrorException e) {
-            throw new GlobalException(AuthExceptionType.INCORRECT_AUTHORIZATION_CODE);
-        }
+        oauthAccessToken = oAuthService.getAccessToken(code);
 
         OAuthUserInfo userInfo = oAuthService.getUserInfo(oauthAccessToken);
 

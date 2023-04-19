@@ -1,11 +1,12 @@
 package louie.hanse.shareplate.oauth.client;
 
+import louie.hanse.shareplate.common.config.OAuthTokenClientConfiguration;
 import louie.hanse.shareplate.oauth.OAuthAccessToken;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "oauth-token-client", url = "${oauth.token.api_url}")
+@FeignClient(name = "oauth-token-client", url = "${oauth.token.api_url}", configuration = OAuthTokenClientConfiguration.class)
 public interface OAuthTokenClient {
 
     @PostMapping("/oauth/token")
