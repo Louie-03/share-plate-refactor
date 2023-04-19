@@ -7,3 +7,16 @@ spring:
     init:
       mode: always
       encoding: utf-8
+
+logging.level:
+  louie:
+    hanse:
+      shareplate:
+        oauth:
+          client: debug
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: FULL

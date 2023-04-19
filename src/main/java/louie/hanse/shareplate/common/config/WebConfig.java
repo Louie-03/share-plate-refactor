@@ -18,6 +18,8 @@ import louie.hanse.shareplate.core.member.service.LoginService;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -29,6 +31,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @RequiredArgsConstructor
+@EnableFeignClients(basePackages = "louie.hanse.shareplate")
+@ConfigurationPropertiesScan(basePackages = "louie.hanse.shareplate")
 @EnableScheduling
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
