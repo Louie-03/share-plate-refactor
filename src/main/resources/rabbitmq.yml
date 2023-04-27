@@ -1,11 +1,11 @@
 spring:
   rabbitmq:
     host: ${RABBIT_MQ_HOST}
-    port: 5671
+    port: ${RABBIT_MQ_PORT}
     username: ${RABBIT_MQ_USERNAME}
     password: ${RABBIT_MQ_PASSWORD}
     ssl:
-      enabled: true
+      enabled: ${RABBIT_MQ_ENABLE_SSL}
     listener:
       simple:
         acknowledge-mode: none
