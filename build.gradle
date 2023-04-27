@@ -42,12 +42,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	runtimeOnly 'mysql:mysql-connector-java'
 
-	//	Kafka
-	implementation 'org.springframework.kafka:spring-kafka'
-	implementation 'org.springframework.kafka:spring-kafka-test'
-
-	// AMQP(RabbitMQ)
-	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    // AMQP(RabbitMQ)
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
 	// Testcontainers
 	testImplementation 'org.testcontainers:junit-jupiter:1.17.2'
