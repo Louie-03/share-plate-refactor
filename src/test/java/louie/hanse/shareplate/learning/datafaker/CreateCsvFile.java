@@ -35,9 +35,7 @@ class CreateCsvFile {
     private RandomService randomService = faker.random();
     private Address address = faker.address();
 
-    // TODO: 샘플 데이터의 개수 상수처리하기
     // TODO: 이메일 주소 영어로 나오도록 수정
-    // TODO: 반복문이 아닌 IdSequence를 사용하도록 변경(IdSequence를 사용하면 sb.append를 하지 않아도 되기 때문에 성능 이점)
     @Test
     void create() {
         CsvTransformer<String> transformer =
@@ -118,10 +116,6 @@ class CreateCsvFile {
             sb.append(entryCsvString).append("\n");
         }
 
-        // TODO: member_id가 겹치지 않도록 구현
-        // 쉐어 작성자의 ID가 아니어야 한다.
-        // 이미 쉐어에 참여한 사람의 ID가 아니어야 한다.
-        // 특정 쉐어에 참여한 회원들의 정보를 담은 Map<ID, List<ID>> 형태의 저장소를 사용하면 된다.
         for (int i = 1; i <= LIMIT; i++) {
             int finalI = i;
             Schema<String, Object> entrySchema = Schema.of(
@@ -138,7 +132,6 @@ class CreateCsvFile {
         }
         createCsvFile("./entry.csv", sb.toString());
 
-        // TODO: 모든 필드를 지정하도록 stress.sql 파일 수정
 //        ChatRoom
         idSequence.init();
         Schema<String, Object> entryChatRoomSchema = Schema.of(
@@ -151,7 +144,6 @@ class CreateCsvFile {
         createCsvFile("./chat_room.csv", entryChatRoomCsvString);
 
 //        ChatRoomMember
-// TODO: 쉐어에 참여한 사람들은 모두 참여 채팅방에 들어가도록 구현
         sb.setLength(0);
         for (Integer key : entryMap.keySet()) {
             for (Integer memberId : entryMap.get(key)) {

@@ -299,7 +299,7 @@ class ValidBlankStringTest {
         IdSequence idSequence = new IdSequence();
         Schema<String, Object> memberSchema = Schema.of(
             field("id", () -> idSequence.getNextSequence()),
-            field("email", () -> internet.emailAddress()), // TODO: 2023/04/23 이메일 주소 영어로 나오도록 수정
+            field("email", () -> internet.emailAddress()),
             field("nickname", () -> faker.name().fullName().replace(" ", "")),
             field("profile_image_url", () -> internet.image()),
             field("refresh_token", () -> null),
@@ -369,7 +369,6 @@ class ValidBlankStringTest {
         createCsvFile("./share_image.csv", sb.toString());
     }
 
-    // TODO: 샘플 데이터의 개수 상수처리하기
     @Test
     void createEntryCsvFile() {
 //        entry
