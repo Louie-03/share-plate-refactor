@@ -1,4 +1,4 @@
-package louie.hanse.shareplate.config;
+package louie.hanse.shareplate.common.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -7,11 +7,21 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.testcontainers.containers.RabbitMQContainer;
 
-@TestConfiguration
-public class RabbitTestConfig {
+@Profile({"load", "test"})
+@Configuration
+public class RabbitConfig {
+
+    public static final RabbitMQContainer RABBIT_CONTAINER = new RabbitMQContainer(
+        "rabbitmq:3-management");
+
+    static {
+        RABBIT_CONTAINER.start();
+    }
 
     @Bean
     public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory,
