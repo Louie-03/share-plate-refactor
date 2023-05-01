@@ -1,11 +1,33 @@
 spring:
   rabbitmq:
+    listener:
+      simple:
+        acknowledge-mode: none
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "rabbitmq-external"
+  rabbitmq:
     host: ${RABBIT_MQ_HOST}
     port: 5671
     username: ${RABBIT_MQ_USERNAME}
     password: ${RABBIT_MQ_PASSWORD}
     ssl:
       enabled: true
-    listener:
-      simple:
-        acknowledge-mode: none
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "rabbitmq-internal"
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    ssl:
+      enabled: false

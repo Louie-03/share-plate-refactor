@@ -1,28 +1,10 @@
 spring:
   profiles:
     active: ${SHARE_PLATE_PROFILE}
-
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DATASOURCE_URL}
-    username: ${DATASOURCE_USERNAME}
-    password: ${DATASOURCE_PASSWORD}
-
-  jpa:
-    properties:
-      hibernate:
-        format_sql: true
-        show_sql: false
-        default_batch_fetch_size: 100
-    open-in-view: false
-
+    group:
+      "dev": "rabbitmq-external,db-dev,feign-client-log,aws-credentials"
+      "test": "rabbitmq-internal,db-dev,feign-client-log"
+      "load": "rabbitmq-internal,db-load"
+      "prod": "rabbitmq-external,db-prod,aws-credentials,save-log"
   config:
-    import: classpath:oauth.yml,classpath:s3.yml,classpath:rabbitmq.yml
-
-logging.level:
-  org:
-    hibernate.SQL: debug
-  com:
-    amazonaws:
-      util:
-        EC2MetadataUtils: error
+    import: classpath:rabbitmq.yml,classpath:oauth.yml,classpath:s3.yml,classpath:database.yml,classpath:log.yml

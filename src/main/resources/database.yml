@@ -1,0 +1,57 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: false
+        default_batch_fetch_size: 100
+    open-in-view: false
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "db-dev"
+  datasource:
+    url: jdbc:mysql://localhost:3306/share_plate
+    username: root
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: create
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+      encoding: utf-8
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "db-prod"
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "db-load"
+  datasource:
+    url: jdbc:mysql://localhost:3307/share_plate
+    username: root
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: update
