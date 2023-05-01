@@ -4,13 +4,12 @@ import static louie.hanse.shareplate.core.keyword.domain.QKeyword.keyword;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import louie.hanse.shareplate.integration.InitIntegrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-public class ExistsQueryTest {
+class ExistsQueryTest extends InitIntegrationTest {
 
     @Autowired
     JPAQueryFactory queryFactory;

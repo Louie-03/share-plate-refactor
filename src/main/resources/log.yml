@@ -1,0 +1,36 @@
+logging.level:
+  org:
+    hibernate.SQL: debug
+  com:
+    amazonaws:
+      util:
+        EC2MetadataUtils: error
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "save-log"
+logging:
+  config: classpath:log/logback.xml
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "feign-client-log"
+
+logging.level:
+  louie:
+    hanse:
+      shareplate:
+        oauth:
+          client: debug
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: FULL

@@ -3,11 +3,8 @@ cloud:
     region:
       static: ap-northeast-2
     s3:
-      bucket: share-plate-upload-file
+      bucket: share-plate-s3
       mock.port: 8001
-    credentials:
-      access-key: ${S3_ACCESS_KEY}
-      secret-key: ${S3_SECRET_KEY}
     stack:
       auto: false
 
@@ -16,3 +13,16 @@ file:
     location:
       share: louie1se
       member: louie1se/member
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "aws-credentials"
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}

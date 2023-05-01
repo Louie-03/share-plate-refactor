@@ -14,8 +14,6 @@ import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import louie.hanse.shareplate.common.jwt.JwtProvider;
-import louie.hanse.shareplate.config.RabbitTestConfig;
-import louie.hanse.shareplate.config.S3MockConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -25,25 +23,19 @@ import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.context.annotation.Import;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
-import org.testcontainers.containers.RabbitMQContainer;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @ExtendWith({RestDocumentationExtension.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import({S3MockConfig.class, RabbitTestConfig.class})
 @Sql("classpath:/data.sql")
+@ActiveProfiles("test")
 public class InitIntegrationTest {
-
-    private static final RabbitMQContainer RABBIT_CONTAINER = new RabbitMQContainer(
-        "rabbitmq:3-management");
 
     @LocalServerPort
     int port;
@@ -58,19 +50,6 @@ public class InitIntegrationTest {
     RabbitListenerEndpointRegistry rabbitListenerEndpointRegistry;
 
     protected RequestSpecification documentationSpec;
-
-    static {
-        RABBIT_CONTAINER.start();
-    }
-
-    @DynamicPropertySource
-    static void overrideConfiguration(DynamicPropertyRegistry registry) {
-        registry.add("spring.rabbitmq.host", RABBIT_CONTAINER::getHost);
-        registry.add("spring.rabbitmq.port", RABBIT_CONTAINER::getAmqpPort);
-        registry.add("spring.rabbitmq.username", RABBIT_CONTAINER::getAdminUsername);
-        registry.add("spring.rabbitmq.password", RABBIT_CONTAINER::getAdminPassword);
-        registry.add("spring.rabbitmq.ssl.enabled", () -> false);
-    }
 
     @BeforeEach
     void setup(RestDocumentationContextProvider restDocumentation) {

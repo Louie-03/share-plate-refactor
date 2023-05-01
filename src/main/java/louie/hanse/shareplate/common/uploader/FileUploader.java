@@ -1,7 +1,6 @@
 package louie.hanse.shareplate.common.uploader;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.IOException;
@@ -47,8 +46,8 @@ public class FileUploader {
         String key = fileUploadLocation + "/" + storeFileName;
 
         try (InputStream inputStream = image.getInputStream()) {
-            amazonS3Client.putObject(new PutObjectRequest(bucket, key, inputStream, objectMetadata)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
+            amazonS3Client.putObject(
+                new PutObjectRequest(bucket, key, inputStream, objectMetadata));
         }
 
         return amazonS3Client.getUrl(bucket, key).toString();
