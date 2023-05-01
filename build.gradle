@@ -46,8 +46,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
 	// Testcontainers
-	testImplementation 'org.testcontainers:junit-jupiter:1.17.2'
-	testImplementation 'org.testcontainers:rabbitmq:1.17.2'
+	implementation 'org.testcontainers:rabbitmq:1.17.2'
 
 	// Dev
 	compileOnly 'org.projectlombok:lombok'
@@ -57,7 +56,9 @@ dependencies {
 	// Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.rest-assured:rest-assured'
-	testImplementation 'io.findify:s3mock_2.13:0.2.6'
+
+	// S3Mock
+	implementation 'io.findify:s3mock_2.13:0.2.6'
 
 	// API Docs
 	testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
